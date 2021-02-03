@@ -76,12 +76,13 @@ WSGI_APPLICATION = 'bike.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'bikerental1',
-        'USER': 'root',
-        'PASSWORD': '123123',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'bikerental',			# 数据库名称
+        'USER': 'root',       		# 名字
+        'PASSWORD': '123123',       # 密码
+        'HOST': 'localhost',		# 可以不写，默认的
     }
 }
 
@@ -116,7 +117,8 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# USE_TZ = True
+USE_TZ = False # 新设置
 
 
 # Static files (CSS, JavaScript, Images)
