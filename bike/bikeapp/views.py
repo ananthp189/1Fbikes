@@ -35,7 +35,7 @@ def save(request):
     password = a.get('Password')
     #print(userName,passWord)
     #连接数据库
-    db = pymysql.connect(host='localhost', 'root', '19990124', 'bikerental')
+    db = pymysql.connect(host='localhost', user= 'root', password='19990124', database='bikerental')
     #创建游标
     cursor = db.cursor()
     #SQL语句
@@ -81,7 +81,7 @@ def query(request):
     global ID
     ID = userid
     # 定义全局变量！！！！！！!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    db = pymysql.connect('localhost', 'root', '19990124', 'bikerental')
+    db = pymysql.connect(host='localhost', user= 'root', password='19990124', database='bikerental')
     cursor = db.cursor()
     # 获取操作游标
     sql = 'select uid,upassword from Users'
@@ -105,7 +105,7 @@ def query(request):
         print(has_user)
     if has_user == 1:
         # 查询用户账户的姓名
-        db = pymysql.connect('localhost', 'root', '19990124', 'bikerental')
+        db = pymysql.connect(host='localhost', user= 'root', password='19990124', database='bikerental')
         cursor2 = db.cursor(pymysql.cursors.DictCursor)
         sql1 = 'select uname from Users where uid ="{}"'
         sql2 = sql1.format(userid)
