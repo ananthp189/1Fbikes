@@ -26,16 +26,40 @@
                 <div class="container mt-5">
 					<div class="page-error">
 						<div class="page-inner">
+							{% if has_register == 0 %}
 							<h1>Succeed</h1>
 							<div class="page-description">
-								Congratulations on becoming one of our users！！
+								Congratulations on becoming one of our users: {{ userName }}！！
 							</div>
 							<div class="page-search">
 								<div class="mt-3">
-									<a href="login2.html" class="btn btn-success">Back to Home page</a>
+								<div >please login first!</div>
+								<input class="btn btn-primary btn-block" type="button" value="login"  onclick="location.href='../login'">
+
 								</div>
 							</div>
+
+							{% endif %}
+
+
+							{% if has_register == 1 %}
+								<h1>failed!</h1>
+								<br>
+								<br>
+								<p class="form"><i>register failed！</i>
+								<br>
+								<p class="form"><i id="ddd">user：{{ userName }} was existed！</i>
+									<div>
+									<br>
+									<br>
+									<br>
+									<input class="btn btn-primary btn-block" type="button" value="register"  onclick="location.href='../register'">
+									</div>
+							{% endif %}
+
+
 						</div>
+
 					</div>
 					<div class="simple-footer mt-5 text-white">
 						Copyright &copy; psd tapp lab 17 ada 2021
