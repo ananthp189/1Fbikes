@@ -23,19 +23,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.login),  # Used to open the login page
-    path('register/', views.register),  # Used to open the register page
-    path('register/save', views.save),  # After entering the user name and password, hand it to the background save function for processing
-    path('login/query', views.query),  # After entering the user name and password, hand it to the background query function for processing
-    path('index/', views.main), 
-    path('defective/', views.defective),  # ????????
-    path('defective/dd', views.dd),
-    path('maps/', views.bikemap),       ##Map
-    path('rent/', views.rent),          ##Rent Bike Module
-    path('move/',views.move)            ## Move Bike Module
-    path('DataVisualation/',views.datavisualation)
-
-
-
+    path('login2/', views.login),  # 用于打开登录页面
+    #path('register/', views.register),  # 用于打开注册页面
+   # path('register/save', views.save),  # 输入用户名密码后交给后台save函数处理
+    path('login2/query', views.query),  # 输入用户名密码后交给后台query函数处理
+    path('mianpage/', views.main),
 ]
 urlpatterns += staticfiles_urlpatterns()
