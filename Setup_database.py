@@ -62,7 +62,7 @@ for i in range(100):
 
 
 # Connect to the database
-conn = pymysql.connect(user='root', password='test1234', host='127.0.0.1', database='project')
+conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='project')
 cur = conn.cursor() 
 cur.execute("""CREATE TABLE IF NOT EXISTS customer_info(
     ID int PRIMARY KEY,
@@ -100,7 +100,7 @@ conn.close()
 ############################ Bike Information Database ############################
 
 # Connect to the database
-conn = pymysql.connect(user='root', password='test1234', host='127.0.0.1', database='project')
+conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='project')
 cur = conn.cursor() 
 cur.execute("""CREATE TABLE IF NOT EXISTS bike_info(
     bID int PRIMARY KEY,
@@ -135,7 +135,7 @@ conn.close()
 ########################## payment information Database #############################
 
 # Connect to the database
-conn = pymysql.connect(user='root', password='test1234', host='127.0.0.1', database='project')
+conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='project')
 cur = conn.cursor() 
 cur.execute("""CREATE TABLE IF NOT EXISTS pay_info(
     pID integer PRIMARY KEY,
