@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bikerental',			# 数据库名称
         'USER': 'root',       		# 名字
-        'PASSWORD': '19990124',       # 密码
+        'PASSWORD': '123123',       # 密码
         'HOST': 'localhost',		# 可以不写，默认的
     }
 }
