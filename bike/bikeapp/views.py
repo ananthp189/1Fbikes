@@ -10,12 +10,12 @@ from django.http import StreamingHttpResponse
 from django.conf import settings
 import urllib.parse
 
+
+# login webpage
 def login(request):
     return render(request,'bikeapp/login.html')
 
-# 注册界面
-
-
+# register page
 def register(request):
     return render(request,'bikeapp/register.html')
 
@@ -23,13 +23,13 @@ def main(request):
     return render(request,'bikeapp/main_page_map.html')
 
 
-# 注册函数 save方法
+# login function save method
 
 def save(request):
-    has_register = 0#用来记录当前账号是否已存在，0：不存在 1：已存在
-    a = request.GET#获取get()请求
+    has_register = 0#Used to record whether the current account already exists, 0: does not exist 1: already exists
+    a = request.GET#Get get() request
     #print(a)
-    #通过get()请求获取前段提交的数据
+    #Get the data submitted in the previous paragraph through get() request
     userID = a.get('UserID')
     name = a.get('Name')
     password = a.get('Password')
@@ -37,45 +37,44 @@ def save(request):
     bankcard = a.get('Bankcard')
 
     #print(userName,passWord)
-    #连接数据库
+    #connect database
     db = pymysql.connect('localhost', 'root', '19990124', 'bikerental')
-    #创建游标
+    #create cursor
     cursor = db.cursor()
-    #SQL语句
+    #SQL sentence
     sql1 = 'select * from Users'
-    #执行SQL语句
+    #Execute SQL sentence
     cursor.execute(sql1)
-    #查询到所有的数据存储到all_users中
+    #Query all data stored in all_users
     all_users = cursor.fetchall()
     i = 0
     while i < len(all_users):
         if userID in all_users[i]:
-            ##表示该账号已经存在
+            #Indicates that the account already exists
             has_register = 1
 
         i += 1
     if has_register == 0:
-        # 将用户名与密码插入到数据库中
+        # Insert the username and password into the database
         sql2 = 'insert into Users(uid,uname,upassword,Tel,bankcard) values(%s,%s,%s,%s,%s)'
         cursor.execute(sql2, (userID, name, password, telephone, bankcard))
         db.commit()
-        # 需要修改数据库中的语句时，增，删，改... ，加上commit
+        # When you need to modify the statement in the database, add, delete, modify..., plus commit
         cursor.close()
         db.close()
-        # tkinter.messagebox.showerror("提示","恭喜您，注册用户成功！")
-        # return HttpResponse('注册成功')
+        # tkinter.messagebox.showerror("Prompt", "Congratulations, the registered user is successful!")
+        # return HttpResponse('register sucess')
         return render(request, 'bikeapp/register_succeed.html', {'has_register':has_register, 'userName': name})
 
     # else:
     if has_register == 1:
         cursor.close()
         db.close()
-        # tkinter.messagebox.showerror("提示","抱歉，用户名重复，注册失败")
-        # return HttpResponse('该账号已存在')
+        # tkinter.messagebox.showerror("Prompt","Sorry, the user name is duplicate, registration failed")
+        # return HttpResponse('user exist!')
         return render(request, 'bikeapp/register_succeed.html', {'has_register':has_register, 'userName': name})
-# 登陆函数 query方法
 
-
+# Login function query method
 def query(request):
     a = request.GET
     userid = a.get('userID')
@@ -83,19 +82,19 @@ def query(request):
     user_tup = (userid, password)
     global ID
     ID = userid
-    # 定义全局变量！！！！！！!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # Define global variables! ! ! ! ! ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     db = pymysql.connect('localhost', 'root', '19990124', 'bikerental')
     cursor = db.cursor()
-    # 获取操作游标
+    # Get operation cursor
     sql = 'select uid,upassword from Users'
     cursor.execute(sql)
-    # 执行sql语句
+    # Execute sql statement
     all_users = cursor.fetchall()
-    # 查询结果全部返回
+    # All query results are returned
     cursor.close()
-    # 关闭游标
+    # Close cursor
     db.close()
-    # 关闭数据库
+    # close database
     has_user = 0
     i = 0
     while i < len(all_users):
@@ -107,7 +106,7 @@ def query(request):
         print("############################")
         print(has_user)
     if has_user == 1:
-        # 查询用户账户的姓名
+        # Query the name of the user account
         db = pymysql.connect('localhost', 'root', '19990124', 'bikerental')
         cursor2 = db.cursor(pymysql.cursors.DictCursor)
         sql1 = 'select uname from Users where uid ="{}"'
@@ -118,10 +117,10 @@ def query(request):
         db.close()
         global username1
         username1 = username
-        # 定义全局变量！！！！！!!!!!!!!!!
+        # Define global variables! ! ! ! ! ! !!!!!!!!
         return render(request, 'bikeapp/main_page_map.html', {'has_user': has_user, 'userName': username})
 
-     # return HttpResponse('登录成功')
+     # return HttpResponse('login success')
     else:
         return render(request, 'bikeapp/login.html', {'has_user': has_user})
-        # return HttpResponse('用户名或密码有误')
+        # return HttpResponse('password or username wrong!')
