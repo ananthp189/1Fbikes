@@ -28,5 +28,7 @@ urlpatterns = [
     path('register/save', views.save),  # After entering the user name and password, hand it to the background save function for processing
     path('login/query', views.query),  # After entering the user name and password, hand it to the background query function for processing
     path('mainpage/', views.main),
+    path('defective/', views.defective),  # 用于打开注册页面
+    path('defective/dd', views.dd),
 ]
 urlpatterns += staticfiles_urlpatterns()

@@ -9,13 +9,14 @@ import os
 from django.http import StreamingHttpResponse
 from django.conf import settings
 import urllib.parse
+import random
 
+
+# login webpage
 def login(request):
     return render(request,'bikeapp/login.html')
 
-# 注册界面
-
-
+# register page
 def register(request):
     return render(request,'bikeapp/register.html')
 
@@ -23,13 +24,13 @@ def main(request):
     return render(request,'bikeapp/main_page_map.html')
 
 
-# 注册函数 save方法
+# login function save method
 
 def save(request):
-    has_register = 0#用来记录当前账号是否已存在，0：不存在 1：已存在
-    a = request.GET#获取get()请求
+    has_register = 0#Used to record whether the current account already exists, 0: does not exist 1: already exists
+    a = request.GET#Get get() request
     #print(a)
-    #通过get()请求获取前段提交的数据
+    #Get the data submitted in the previous paragraph through get() request
     userID = a.get('UserID')
     name = a.get('Name')
     password = a.get('Password')
@@ -37,45 +38,44 @@ def save(request):
     bankcard = a.get('Bankcard')
 
     #print(userName,passWord)
-    #连接数据库
-    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-    #创建游标
+    #connect database
+    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+    #create cursor
     cursor = db.cursor()
-    #SQL语句
-    sql1 = 'select * from Users'
-    #执行SQL语句
+    #SQL sentence
+    sql1 = 'select * from customer_info'
+    #Execute SQL sentence
     cursor.execute(sql1)
-    #查询到所有的数据存储到all_users中
+    #Query all data stored in all_users
     all_users = cursor.fetchall()
     i = 0
     while i < len(all_users):
         if userID in all_users[i]:
-            ##表示该账号已经存在
+            #Indicates that the account already exists
             has_register = 1
 
         i += 1
     if has_register == 0:
-        # 将用户名与密码插入到数据库中
-        sql2 = 'insert into Users(uid,uname,upassword,Tel,bankcard) values(%s,%s,%s,%s,%s)'
+        # Insert the username and password into the database
+        sql2 = 'insert into customer_info(ID,UserName,Password,Tel,Bankcard) values(%s,%s,%s,%s,%s)'
         cursor.execute(sql2, (userID, name, password, telephone, bankcard))
         db.commit()
-        # 需要修改数据库中的语句时，增，删，改... ，加上commit
+        # When you need to modify the statement in the database, add, delete, modify..., plus commit
         cursor.close()
         db.close()
-        # tkinter.messagebox.showerror("提示","恭喜您，注册用户成功！")
-        # return HttpResponse('注册成功')
+        # tkinter.messagebox.showerror("Prompt", "Congratulations, the registered user is successful!")
+        # return HttpResponse('register sucess')
         return render(request, 'bikeapp/register_succeed.html', {'has_register':has_register, 'userName': name})
 
     # else:
     if has_register == 1:
         cursor.close()
         db.close()
-        # tkinter.messagebox.showerror("提示","抱歉，用户名重复，注册失败")
-        # return HttpResponse('该账号已存在')
-        return render(request, 'bikeapp/register_succeed.html', {'has_register': has_register, 'userName': name})
-# 登陆函数 query方法
+        # tkinter.messagebox.showerror("Prompt","Sorry, the user name is duplicate, registration failed")
+        # return HttpResponse('user exist!')
+        return render(request, 'bikeapp/register_succeed.html', {'has_register':has_register, 'userName': name})
 
-
+# Login function query method
 def query(request):
     a = request.GET
     userid = a.get('userID')
@@ -83,35 +83,34 @@ def query(request):
     user_tup = (userid, password)
     global ID
     ID = userid
-    # 定义全局变量！！！！！！!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    # Define global variables! ! ! ! ! ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
     cursor = db.cursor()
-    # 获取操作游标
-    sql = 'select uid,upassword from Users'
+    # Get operation cursor
+    sql = 'select ID,Password from customer_info'
     cursor.execute(sql)
-    # 执行sql语句
+    # Execute sql statement
     all_users = cursor.fetchall()
-    # 查询结果全部返回
+    # All query results are returned
     cursor.close()
-    # 关闭游标
+    # Close cursor
     db.close()
-    # 关闭数据库
+    # close database
     has_user = 0
     i = 0
     while i < len(all_users):
-        # print("!!!!!!!!!!!!!!!!!!!!!!")
-        # print(all_users[i])
+        print("!!!!!!!!!!!!!!!!!!!!!!")
+        print(all_users[i])
         if user_tup == all_users[i]:
             has_user = 1
         i += 1
-        # print("############################")
-        # print(has_user)
+        print("############################")
+        print(has_user)
     if has_user == 1:
-        # 查询用户账户的姓名
-        # (host="localhost", user="root", password="xxx", database="xxxx")
-        db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+        # Query the name of the user account
+        db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
         cursor2 = db.cursor(pymysql.cursors.DictCursor)
-        sql1 = 'select uname from Users where uid ="{}"'
+        sql1 = 'select UserName from customer_info where ID ="{}"'
         sql2 = sql1.format(userid)
         cursor2.execute(sql2)
         username = cursor2.fetchall()
@@ -119,10 +118,114 @@ def query(request):
         db.close()
         global username1
         username1 = username
-        # 定义全局变量！！！！！!!!!!!!!!!
+        # Define global variables! ! ! ! ! ! !!!!!!!!
         return render(request, 'bikeapp/main_page_map.html', {'has_user': has_user, 'userName': username})
 
-     # return HttpResponse('登录成功')
+     # return HttpResponse('login success')
     else:
         return render(request, 'bikeapp/login.html', {'has_user': has_user})
-        # return HttpResponse('用户名或密码有误')
+        # return HttpResponse('password or username wrong!')
+
+
+def defective(request):
+
+    return render(request,'bikeapp/defective.html')
+
+def dd(request):
+    has_report = 0
+    d = request.GET
+    bikeid = d.get('BikeID')
+    bikeproblem = d.get('Bikeproblem')
+
+    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+    cursor = db.cursor()
+    sql1 = 'select * from bike_info'
+    cursor.execute(sql1)
+    all_bike = cursor.fetchall()
+    i = 0
+    while i < len(all_bike):
+        if bikeid in all_bike[i]:
+            has_report = 1
+
+        i += 1
+    if has_report == 1:
+        usage = 0  # set bike_usage = 0 (don't use)
+        status = 2  # set bike status = 2 (1 good, 2 broken)
+        db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+        cursor = db.cursor()
+        sql = 'UPDATE bike_info SET bproblem=%s, busage=%s, bstatus=%s where bID=%s'
+        cursor.execute(sql, (bikeproblem, usage, status, bikeid))
+        db.commit()
+        cursor.close()
+        db.close()
+
+    return render(request,'bikeapp/defective.html',{'has_report': has_report})
+
+# payment
+
+
+def payment(request):
+
+    return render(request,'bikeapp/pay.html')
+
+
+def pay(request):
+    # creat paymentid
+    bID = 102 # get from rentbike function set a global various
+    payid = random.sample(range(10002,11000),1)
+    # set payment status
+    status = 0
+    # duration
+    totaltime = 612
+    start = 1201
+    end = 1306
+    bduration = end - start
+    count = bduration // 100 # get the hour
+    original_bill = count * 0.5 # 0.5 pounds an hour
+    if totaltime >= 500:
+        discount_bill = original_bill * 0.8 # discount, 80% off
+    else:
+        discount_bill = original_bill # no discount
+        # 存入数据库
+
+    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+    # 创建游标
+    cursor = db.cursor()
+    sql2 = 'insert into pay_info(pID,pstatus,starttime, endtime, duration, oribill, discount, ID, bID) values(%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+    cursor.execute(sql2, (payid, status, start, end, bduration, original_bill, discount_bill,ID, bID))
+    db.commit()
+    cursor.close()
+    db.close()
+
+    #按钮返回值
+    p = request.GET
+    submit1 = p.get('subtype')
+    if submit1 == 1:
+        put = 1
+        status = 1
+        buse = 0  # in bike chart
+        totaltime = totaltime + count * 60 + (bduration % 100)
+    # 存入数据库
+
+    #更新支付状态 payment
+    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+    cursor = db.cursor()
+    sql3 = 'UPDATE pay_info SET pstatus=%s where pID=%s'
+    cursor.execute(sql3, (status, payid))
+    db.commit()
+
+    #更新累计时间 user
+    sql3 = 'UPDATE customer_info SET renttime=%s where ID=%s'
+    cursor.execute(sql3, (totaltime, ID))
+    db.commit()
+
+    # 更新自行车状态 bike
+    sql4 = 'UPDATE bike_info SET bstatus=%s where bID=%s'
+    cursor.execute(sql4, (buse, bID))
+    db.commit()
+    cursor.close()
+    db.close()
+
+    return render(request,'bikeapp/pay.html', {'payid': payid, 'time': count, 'original_bill': original_bill, 'discount_bill': discount_bill, 'put':put })
+
+
