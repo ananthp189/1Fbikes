@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -228,4 +230,38 @@ def pay(request):
 
     return render(request,'bikeapp/pay.html', {'payid': payid, 'time': count, 'original_bill': original_bill, 'discount_bill': discount_bill, 'put':put })
 
+
+#show bike map-- Front and back interaction
+def bikemap(request):
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    # add “pymysql.cursors.DictCursor” to pass variables to web-front
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    #search bike information to show to managers.
+    sql = 'select bID,bstatus,  barea, bpassword, busage from bike_info'
+    cursor.execute(sql)
+    all_bikes = cursor.fetchall()
+    #select gpsx and gpsy for drawing in the map
+    sqlGPS = 'select bGPSx,bGPSy from bike_info'
+    cursor.execute(sqlGPS)
+    bikesGPS = cursor.fetchall()
+    cursor.close()
+    # 关闭游标
+    db.close()
+    # 关闭数据库
+    allbikes_list = []
+    for i in range(len(all_bikes)):
+        #list() to replace dict.value to list
+        allbikes_list.append(list(all_bikes[i].values()))
+
+    print(allbikes_list)
+    bGPS = []
+    for i in range(len(bikesGPS)):
+        bGPS.append(list(bikesGPS[i].values()))
+    for i in range(len(bGPS)):
+        for j in range(2):
+            bGPS[i][j] = (bGPS[i][j])
+    print("_-_")
+    print(bGPS)
+    #
+    return render(request,'bikeapp/bike_map.html', {'bikeGPS': json.dumps(bGPS), 'bikesinfo': json.dumps(allbikes_list)})
 
