@@ -39,7 +39,7 @@ def save(request):
 
     #print(userName,passWord)
     #connect database
-    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     #create cursor
     cursor = db.cursor()
     #SQL sentence
@@ -84,7 +84,7 @@ def query(request):
     global ID
     ID = userid
     # Define global variables! ! ! ! ! ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor()
     # Get operation cursor
     sql = 'select ID,Password from customer_info'
@@ -108,7 +108,7 @@ def query(request):
         print(has_user)
     if has_user == 1:
         # Query the name of the user account
-        db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+        db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
         cursor2 = db.cursor(pymysql.cursors.DictCursor)
         sql1 = 'select UserName from customer_info where ID ="{}"'
         sql2 = sql1.format(userid)
@@ -137,7 +137,7 @@ def dd(request):
     bikeid = d.get('BikeID')
     bikeproblem = d.get('Bikeproblem')
 
-    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor()
     sql1 = 'select * from bike_info'
     cursor.execute(sql1)
@@ -151,7 +151,7 @@ def dd(request):
     if has_report == 1:
         usage = 0  # set bike_usage = 0 (don't use)
         status = 2  # set bike status = 2 (1 good, 2 broken)
-        db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+        db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
         cursor = db.cursor()
         sql = 'UPDATE bike_info SET bproblem=%s, busage=%s, bstatus=%s where bID=%s'
         cursor.execute(sql, (bikeproblem, usage, status, bikeid))
@@ -188,7 +188,7 @@ def pay(request):
         discount_bill = original_bill # no discount
         # 存入数据库
 
-    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     # 创建游标
     cursor = db.cursor()
     sql2 = 'insert into pay_info(pID,pstatus,starttime, endtime, duration, oribill, discount, ID, bID) values(%s,%s,%s,%s,%s,%s,%s,%s,%s)'
@@ -208,7 +208,7 @@ def pay(request):
     # 存入数据库
 
     #更新支付状态 payment
-    db = pymysql.connect('localhost', 'root', '123123', 'bikerental')
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor()
     sql3 = 'UPDATE pay_info SET pstatus=%s where pID=%s'
     cursor.execute(sql3, (status, payid))
