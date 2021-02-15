@@ -1,4 +1,3 @@
-
 import pymysql
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,20 +8,20 @@ from pyecharts.charts import Grid, Liquid
 from pyecharts.commons.utils import JsCode
 
 ##### Connect to the data base
-'''
-conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='project')
-cur = conn.cursor() 
-'''
+
+conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
+cur = conn.cursor()
+
 
 ##### Create new table for data visulazation
-'''
+
 cur.execute("CREATE TABLE bike_info_DV SELECT * FROM bike_info")
 cur.execute("CREATE TABLE customer_info_DV SELECT * FROM customer_info")
 cur.execute("CREATE TABLE pay_info_DV SELECT * FROM pay_info")
-'''
+
 
 ##### check user's history
-'''
+
 userID = "1"   # the userID need to be check
 
 cur.execute('select * from pay_info\
@@ -33,11 +32,11 @@ for s in cur.fetchall():
 conn.commit()
 cur.close()
 conn.close()
-'''
+
 
 
 ###### prime account percentage
-'''
+
 cur.execute('select * from customer_info\
             where usertype = %s' ,("0"))
 
@@ -59,12 +58,12 @@ labels = ["Prime customer", "Normal customer"]
 
 plt.pie(size, explode = explode, colors = colors, autopct = '%1.1f%%', shadow = False, startangle= 90, labels= labels)
 plt.show()
-'''
+
 
 
 
 # Second way for pie chart
-'''
+
 cur.execute('select * from customer_info\
             where usertype = %s' ,("0"))
 
@@ -136,37 +135,141 @@ c = (
     .set_global_opts(title_opts=opts.TitleOpts(title="User Structure"))
     .render("pie_User_Structure.html")
 )
-'''
+
 
 ######## bike_status pie chart
 
-'''
+# check the number of bike in each area
+cur.execute('select * from bike_info\
+            where barea = %s' ,("A"))
+
+num_A = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s' ,("B"))
+
+num_B = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s' ,("C"))
+
+num_C = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s' ,("D"))
+
+num_D = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s' ,("E"))
+
+num_E = len(cur.fetchall())
+
+print(num_A)
+print(num_B)
+print(num_C)
+print(num_D)
+print(num_E)
+
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("A", "0"))
+
+num_A0 = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("A", "1"))
+
+num_A1 = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("B", "0"))
+
+num_B0 = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("B", "1"))
+
+num_B1 = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("C", "0"))
+
+num_C0 = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("C", "1"))
+
+num_C1 = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("D", "0"))
+
+num_D0 = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("D", "1"))
+
+num_D1 = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("E", "0"))
+
+num_E0 = len(cur.fetchall())
+
+cur.execute('select * from bike_info\
+            where barea = %s and bstatus = %s' ,("E", "1"))
+
+num_E1 = len(cur.fetchall())
+
+print(num_A0)
+print(num_A1)
+print(num_B0)
+print(num_B1)
+print(num_C0)
+print(num_C1)
+print(num_D0)
+print(num_D1)
+print(num_E0)
+print(num_E1)
+
+
+
 bike_info = pd.read_csv("bike_info_DV.csv")
 
 df_num1 = bike_info["bstatus"]
 df_num2 = bike_info["barea"]
 
-# print((df_num1 == 0).sum())
-# print((df_num1 == 1).sum())
-# A_sum = (df_num2 == "A").sum()
-# B_sum = (df_num2 == "B").sum()
-# C_sum = (df_num2 == "C").sum()
-# D_sum = (df_num2 == "D").sum()
-# print(((bike_info["bstatus"] == 0) & (bike_info["barea"] == "A")).sum())
-# print(((bike_info["bstatus"] == 1) & (bike_info["barea"] == "A")).sum())
-# print(((bike_info["bstatus"] == 0) & (bike_info["barea"] == "B")).sum())
-# print(((bike_info["bstatus"] == 1) & (bike_info["barea"] == "B")).sum())
-# print(((bike_info["bstatus"] == 0) & (bike_info["barea"] == "C")).sum())
-# print(((bike_info["bstatus"] == 1) & (bike_info["barea"] == "C")).sum())
-# print(((bike_info["bstatus"] == 0) & (bike_info["barea"] == "D")).sum())
-# print(((bike_info["bstatus"] == 1) & (bike_info["barea"] == "D")).sum())
+print((df_num1 == 0).sum())
+print((df_num1 == 1).sum())
+A_sum = (df_num2 == "A").sum()
+B_sum = (df_num2 == "B").sum()
+C_sum = (df_num2 == "C").sum()
+D_sum = (df_num2 == "D").sum()
+E_sum = (df_num2 == "E").sum()
+print(A_sum)
+print(B_sum)
+print(C_sum)
+print(D_sum)
+print(E_sum)
+print(((bike_info["bstatus"] == 0) & (bike_info["barea"] == "A")).sum())
+print(((bike_info["bstatus"] == 1) & (bike_info["barea"] == "A")).sum())
+print(((bike_info["bstatus"] == 0) & (bike_info["barea"] == "B")).sum())
+print(((bike_info["bstatus"] == 1) & (bike_info["barea"] == "B")).sum())
+print(((bike_info["bstatus"] == 0) & (bike_info["barea"] == "C")).sum())
+print(((bike_info["bstatus"] == 1) & (bike_info["barea"] == "C")).sum())
+print(((bike_info["bstatus"] == 0) & (bike_info["barea"] == "D")).sum())
+print(((bike_info["bstatus"] == 1) & (bike_info["barea"] == "D")).sum())
+print(((bike_info["bstatus"] == 0) & (bike_info["barea"] == "E")).sum())
+print(((bike_info["bstatus"] == 1) & (bike_info["barea"] == "E")).sum())
 
-inner_x_data = ["A", "B", "C", "D"]
-inner_y_data = [137, 101, 126, 136]
+
+inner_x_data = ["A", "B", "C", "D", "E"]
+inner_y_data = [62, 111, 112, 94, 121]
 inner_data_pair = [list(z) for z in zip(inner_x_data, inner_y_data)]
 
-outer_x_data = ["A_good", "A_broken", "B_good", "B_broken", "C_good", "C_broken", "D_good", "D_broken"]
-outer_y_data = [134, 3, 99, 2, 118, 8, 130, 6]
+outer_x_data = ["A_good", "A_broken", "B_good", "B_broken", "C_good", "C_broken", "D_good", "D_broken", "E_good", "E_broken"]
+outer_y_data = [58, 4, 105, 6, 104, 8, 91, 3, 113, 8]
 outer_data_pair = [list(z) for z in zip(outer_x_data, outer_y_data)]
 
 (
@@ -221,13 +324,13 @@ outer_data_pair = [list(z) for z in zip(outer_x_data, outer_y_data)]
     )
     .render("pie_bike_status.html")
 )
-'''
+
 
 
 
 ######### Bar plot for rent duration
 
-'''
+
 pay_info = pd.read_csv("pay_info_DV.csv")
 customer_info = pd.read_csv("customer_info_DV.csv")
 #merge two dataframe
@@ -247,6 +350,21 @@ ph_4 = ((combined_info["duration"] > 180) & (combined_info["duration"] <= 240) &
 ph_5 = ((combined_info["duration"] > 240) & (combined_info["duration"] <= 300) & (combined_info["usertype"] == 1)).sum()
 ph_6 = ((combined_info["duration"] > 300) & (combined_info["duration"] <= 900) & (combined_info["usertype"] == 1)).sum()
 
+print(nh_1)
+print(nh_2)
+print(nh_3)
+print(nh_4)
+print(nh_5)
+print(nh_6)
+print(ph_1)
+print(ph_2)
+print(ph_3)
+print(ph_4)
+print(ph_5)
+print(ph_6)
+
+
+
 x_label = ("Under 1 hour", "1~2 hours", "2~3 hours","3~4 hours", "4~5 hours", "Above 5 hours")
 # n_yaxis = [nh_1, nh_2, nh_3, nh_4, nh_5, nh_6]
 # p_yaxis = [ph_1, ph_2, ph_3, ph_4, ph_5, ph_6]
@@ -255,18 +373,18 @@ x_label = ("Under 1 hour", "1~2 hours", "2~3 hours","3~4 hours", "4~5 hours", "A
 c = (
     Bar()
     .add_xaxis(x_label)
-    .add_yaxis("Normal Customer", [50, 54, 58, 76, 65, 338])
-    .add_yaxis("Prime Customer", [14, 15, 25, 15, 8, 70])
+    .add_yaxis("Normal Customer", [294, 25, 21, 17, 25, 127])
+    .add_yaxis("Prime Customer", [155, 13, 16, 7, 20, 88])
     .set_global_opts(title_opts=opts.TitleOpts(title="Rent Duration", subtitle="Normal & Prime"))
-    .render("bar_Rent_Duration.html")
+    .render("bar_Rent_Duration1.html")
 )
-'''
+
 
 
 
 ######### Wordcloud
 
-'''
+
 data = [
     ("BikeRental", "999"),
     ("Low-Carbon", "777"),
@@ -415,11 +533,11 @@ data = [
     )
     .render("BikeRental_wordcloud.html")
 )
-'''
+
 
 
 ##########   Liquid charts
-'''
+
 bike_info = pd.read_csv("bike_info_DV.csv")   #input datatable
 
 bike_usage_num = (bike_info["busage"] == 1).sum()   # count how many bike is being used
@@ -455,7 +573,7 @@ l2 = Liquid().add(
 
 grid = Grid().add(l1, grid_opts=opts.GridOpts()).add(l2, grid_opts=opts.GridOpts())
 grid.render("multiple_liquid.html")
-'''
+
 
 
 
