@@ -265,3 +265,142 @@ def bikemap(request):
     #
     return render(request,'bikeapp/bike_map.html', {'bikeGPS': json.dumps(bGPS), 'bikesinfo': json.dumps(allbikes_list)})
 
+
+
+###########movebike-collect data########
+def movebike(request):
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    # add “pymysql.cursors.DictCursor” to pass variables to web-front
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    sql = 'select bID, bstatus, bGPSx,bGPSy barea, busage from bike_info'
+    cursor.execute(sql)
+    all_bikes = cursor.fetchall()
+    # 查询结果全部返回
+    ###################li------add-----------
+    area_list = []
+    for a in all_bikes:
+        area_list.append(a['barea'])
+    result = dict()
+    for b in set(area_list):
+        result[b] = area_list.count(b)
+    # print(result.items())
+    # 假设每个区域标准5辆车，显示车辆不足区域
+    normal = 5;
+    warn_list = []
+    for i in result.items():
+        if i[1] < normal:
+            y = "area " + i[0] + " needs more bikes!!!!"
+            print(y)
+            warn_list.append(y)
+        else:
+            x = "area " + i[0] + " is good"
+            print(x)
+            warn_list.append(x)
+    # print(warn_list)
+    ######################
+    cursor.close()
+    # 关闭游标
+    db.close()
+    # 关闭数据库
+    # print(all_bikes)
+    return render(request, 'bikeapp/movebike.html', {'allbikes': all_bikes,'result':result.items(),'warn':warn_list})
+
+
+#---------------movebike_action--------#
+def move(request):
+    a = request.GET
+    move_bid = a.get('bID')
+    move_area = a.get('barea')
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    cursor = db.cursor()
+    sql = 'update bike_info set barea=%s where bID=%s'
+    cursor.execute(sql, (move_area, move_bid))
+    db.commit()
+    cursor.close()
+    db.close()
+    return HttpResponse('succeed')
+
+
+###########movebike-collect data########
+def movebike(request):
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    # add “pymysql.cursors.DictCursor” to pass variables to web-front
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    sql = 'select bID, bstatus, bGPSx,bGPSy, barea, busage from bike_info'
+    cursor.execute(sql)
+    all_bikes = cursor.fetchall()
+    # 查询结果全部返回
+    ###################li------add-----------
+    area_list = []
+    for a in all_bikes:
+        area_list.append(a['barea'])
+    result = dict()
+    for b in set(area_list):
+        result[b] = area_list.count(b)
+    # print(result.items())
+    # 假设每个区域标准5辆车，显示车辆不足区域
+    normal = 5;
+    warn_list = []
+    for i in result.items():
+        if i[1] < normal:
+            y = "area " + i[0] + " needs more bikes!!!!"
+            print(y)
+            warn_list.append(y)
+        else:
+            x = "area " + i[0] + " is good"
+            print(x)
+            warn_list.append(x)
+    # print(warn_list)
+    ######################
+    cursor.close()
+    # 关闭游标
+    db.close()
+    # 关闭数据库
+    # print(all_bikes)
+    return render(request, 'bikeapp/movebike.html', {'allbikes': all_bikes,'result':result.items(),'warn':warn_list})
+
+
+#---------------movebike_action--------#
+def move(request):
+    a = request.GET
+    move_bid = a.get('bID')
+    move_area = a.get('barea')
+    global gpsx, gpsy
+    if move_area == 'A':
+        gpsx = random.uniform(55.85,55.9)
+        gpsy = random.uniform(-4.15,-4.26)
+    elif move_area == 'B':
+        print("aaaaaaaaaa")
+        gpsx = random.uniform(55.90,55.95)
+        gpsy = random.uniform(-4.26,-4.31)
+    elif move_area == 'C':
+        gpsx = random.uniform(55.90,55.95)
+        gpsy = random.uniform(-4.0,-4.15)
+    elif move_area == 'D':
+        gpsx = random.uniform(55.81,55.85)
+        gpsy = random.uniform(-4.26,-4.31)
+    elif move_area == 'E':
+        gpsx = random.uniform(55.81,55.85)
+        gpsy = random.uniform(-4.0,-4.15)
+    gpsx = str(gpsx)
+    gpsy = str(gpsy)
+    print(gpsx)
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    cursor = db.cursor()
+    sql = 'update bike_info set barea=%s where bID=%s'
+    cursor.execute(sql, (move_area, move_bid))
+    db.commit()
+    cursor.close()
+    db.close()
+
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    cursor = db.cursor()
+    sql2 = 'update bike_info set bGPSx=%s,bGPSy=%s where bID=%s'
+    cursor.execute(sql2, (gpsx, gpsy, move_bid))
+    db.commit()
+    cursor.close()
+    db.close()
+    return HttpResponse('succeed')
+
+
+

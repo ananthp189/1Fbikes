@@ -1,344 +1,98 @@
-
-<!--Peiyi's move bike module -->
-<!--movebike(request)-->
-
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="bike1f" content="width=device-width, initial-scale=1">
-		<title></title>
-		<!--Bootstrap.min css to adjust center-->
-		<!--<link rel="stylesheet" href="/bikeapp/style/css/bootstrap.min.css">-->
-		<!--Style css to color/photo/style-->
-<!--		<link rel="stylesheet" href="/bikeapp/style/css/bootstrap.min.css">-->
-	 	{% load static %}
-<!--			<script type="text/javascript" src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
-				<script src="{% static 'bootstrap/js/bootstrap-table.min.js' %}"></script>
-			<img src="{% static 'pic/example.jpg' %} ">
- 			<link rel="stylesheet" href="/static/css/main.css"/>
+<head>
+    <meta charset="UTF-8">
+    <title>movebike</title>
+</head>
+<body>
+<style type="text/css">
+    #select_move{
+        position: absolute;
+        top:670px;
+        left:30%;
+        width:800px;
+        height:300px;
+        background:white;
+        display:none
+    }
+</style>
+    <table border="1" width="30%" cellpadding="0" cellspacing="0" bgcolor="#f0ffff" align="center">
+        <caption>Bike Information</caption>
+        <thead>
+            <tr bgcolor="#ff7f50">
+                <th>Bike ID</th>
+                <th>Bike status</th>
+                <th>Bike latitude</th>
+                <th>Bike longitude</th>
+                <th>Bike area</th>
+                <th>Bike usage</th>
+            </tr>
+        </thead>
 
-		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css" media="all">-->
-		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-		<link rel="stylesheet" href="{% static 'css/icons.css' %}" />
-		<link rel="stylesheet" href="{% static 'css/sidemenu.css' %}" />
-		<link rel="stylesheet" href="{% static 'css/style.css' %}" />
-		<script src="{% static 'js/jquery.min.js' %}"></script>
-		<script src="{% static 'js/scripts.min.js' %}"></script>
-		<script src="{% static 'js/sidemenu.min.js' %}"></script>
-		<img src="{% static 'img/img14.jpg' %} ">
-		<img src="{% static 'img/logo.png' %} ">
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-	</head>
-	<body class="app ">
+        <tbody align="center">
+        {% for bike_info in allbikes %}
+             <tr>
+                <td>{{bike_info.bID}}</td>
+                <td>{{bike_info.bstatus}}</td>
+                <td>{{bike_info.bGPSx}}</td>
+                 <td>{{bike_info.bGPSy}}</td>
+                <td>{{bike_info.barea}}</td>
+                <td>{{bike_info.busage}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+</table>
+<table border="1" width="30%" cellpadding="0" cellspacing="0" bgcolor="#f0ffff" align="center">
+        <caption>Bike area and amount</caption>
+        <thead>
+            <tr bgcolor="#ff7f50">
+                <th>Bike area and amount</th>
+            </tr>
+        </thead>
+        <tbody align="center">
+        {% for i in result %}
+             <tr>
+                <td>{{i}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+<p>Message!!!!!</p>
+{% for i in warn %}
+             <tr>
+                <td>{{i}}!</td>
+            </tr>
+        {% endfor %}
+<button type="button" onclick="outDiv()">move bike</button>
+<form action="move" method="get">
+    <div id="select_move">
+        <input type="text" name="bID" placeholder="Please type a bikeID that you want to remove">
+<!--        如果没有id就报错！-->
 
-		<div id="spinner">mainpage!!!!!!!!!!</div>
+        <span>TO</span>
 
-		<div id="app">
-			<div class="main-wrapper" >
-				<nav class="navbar navbar-expand-lg main-navbar">
-					<a class="header-brand" href="index.html">
-						<img src="assets/img/brand/logo.png" class="header-brand-img" alt="Kharna-Admin  logo">
-					</a>
-					<form class="form-inline mr-auto">
-						<ul class="navbar-nav mr-3">
-							<li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="ion ion-navicon-round"></i></a></li>
-							<li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-md-none navsearch"><i class="ion ion-search"></i></a></li>
-						</ul>
-						<div class="search-element">
-							<input class="form-control" type="search" placeholder="Search" aria-label="Search">
-							<button class="btn btn-primary" type="submit"><i class="ion ion-search"></i></button>
-						</div>
-					</form>
-					<ul class="navbar-nav navbar-right">
-						<li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep"><i class="ion-ios-email-outline"></i></a>
-							<div class="dropdown-menu dropdown-list dropdown-menu-right">
-								<div class="dropdown-header">Messages
-									<div class="float-right">
-										<a href="#">View All</a>
-									</div>
-								</div>
-								<div class="dropdown-list-content">
-									<a href="#" class="dropdown-item dropdown-item-unread">
-										<img alt="image" src="assets/img/avatar/avatar-1.jpeg" class="rounded-circle dropdown-item-img">
-										<div class="dropdown-item-desc">
-											<div class="dropdownmsg d-flex">
-												<div class="">
-													<b>Stewart Ball</b>
-													<p>Your template awesome</p>
-												</div>
-												<div class="time">6 hours ago</div>
-											</div>
+        <input type="text" name="barea" placeholder=" which area">
+        <!--<select>
+            <option value="A">area A</option>
+            <option value="B">area B</option>
+            <option value="C">area C</option>
+            <option value="D">area D</option>
+        </select>
+        <button>confirm</button>-->
+        <input type="submit" name="submit1" value="submit">
+        <!--<button onclick="hideDiv()">cancel</button>-->
+    </div>
+    </form>
 
-										</div>
-									</a>
-									<a href="#" class="dropdown-item dropdown-item-unread">
-										<img alt="image" src="assets/img/avatar/avatar-2.jpeg" class="rounded-circle dropdown-item-img">
-										<div class="dropdown-item-desc">
-											<div class="dropdownmsg d-flex">
-												<div class="">
-													<b>Jonathan North</b>
-													<p>Your Order Shipped.....</p>
-												</div>
-												<div class="time">45 mins ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="dropdown-item">
-										<img alt="image" src="assets/img/avatar/avatar-4.jpeg" class="rounded-circle dropdown-item-img">
-										<div class="dropdown-item-desc">
-											<div class="dropdownmsg d-flex">
-												<div class="">
-													<b>Victor Taylor</b>
-													<p>Hi!, I' am web developer</p>
-												</div>
-												<div class="time"> 8 hours ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="dropdown-item">
-										<img alt="image" src="assets/img/avatar/avatar-3.jpeg" class="rounded-circle dropdown-item-img">
-										<div class="dropdown-item-desc">
-											<div class="dropdownmsg d-flex">
-												<div class="">
-													<b>Ruth	Arnold</b>
-													<p>Hi!, I' am web designer</p>
-												</div>
-												<div class="time"> 3 hours ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="dropdown-item">
-										<img alt="image" src="assets/img/avatar/avatar-5.jpeg" class="rounded-circle dropdown-item-img">
-										<div class="dropdown-item-desc">
-											<div class="dropdownmsg d-flex">
-												<div class="">
-													<b>Sam	Lyman</b>
-													<p>Hi!, I' am java developer</p>
-												</div>
-												<div class="time"> 15 mintues ago</div>
-											</div>
-										</div>
-									</a>
-								</div>
-							</div>
-						</li>
-						<li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link  nav-link-lg beep"><i class="ion-ios-bell-outline"></i></a>
-							<div class="dropdown-menu dropdown-list dropdown-menu-right">
-								<div class="dropdown-header">Notifications
-									<div class="float-right">
-										<a href="#">View All</a>
-									</div>
-								</div>
-								<div class="dropdown-list-content">
-									<a href="#" class="dropdown-item">
-										<i class="fa fa-users text-primary"></i>
-										<div class="dropdown-item-desc">
-											<b>So many Users Visit your template</b>
-										</div>
-									</a>
-									<a href="#" class="dropdown-item">
-										<i class="fa fa-exclamation-triangle text-danger"></i>
-										<div class="dropdown-item-desc">
-											<b>Error message occurred....</b>
-										</div>
-									</a>
-									<a href="#" class="dropdown-item">
-										<i class="fa fa-users text-warning"></i>
-										<div class="dropdown-item-desc">
-											<b> Adding new people</b>
-										</div>
-									</a>
-									<a href="#" class="dropdown-item">
-										<i class="fa fa-shopping-cart text-success"></i>
-										<div class="dropdown-item-desc">
-											<b>Your items Arrived</b>
-										</div>
-									</a>
-									<a href="#" class="dropdown-item">
-										<i class="fa fa-comment text-primary"></i>
-										<div class="dropdown-item-desc">
-											<b>New Message received</b> <div class="float-right"><span class="badge badge-pill badge-danger badge-sm">67</span></div>
-										</div>
-									</a>
-									<a href="#" class="dropdown-item">
-										<i class="fa fa-users text-primary"></i>
-										<div class="dropdown-item-desc">
-											<b>So many Users Visit your template</b>
-										</div>
-									</a>
-								</div>
-							</div>
-						</li>
-						<li class="dropdown dropdown-list-toggle">
-							<a href="#" class="nav-link nav-link-lg full-screen-link">
-								<i class="ion-arrow-expand"  id="fullscreen-button"></i>
-							</a>
-						</li>
-						<li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
-							<img src="assets/img/avatar/avatar-1.jpeg" alt="profile-user" class="rounded-circle w-32">
-							<div class="d-sm-none d-lg-inline-block">Jessica Lee</div></a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<a href="profile.html" class="dropdown-item has-icon">
-									<i class="ion ion-android-person"></i> Profile
-								</a>
-								<a href="profile.html" class="dropdown-item has-icon">
-									<i class="ion-android-drafts"></i> Messages
-								</a>
-								<a href="profile.html" class="dropdown-item has-icon">
-									<i class="ion ion-gear-a"></i> Settings
-								</a>
-								<a href="#" class="dropdown-item has-icon">
-									<i class="ion-ios-redo"></i> Logout
-								</a>
-							</div>
-						</li>
-					</ul>
-				</nav>
+<script>
+    function outDiv(){
+    document.getElementById("select_move").style.display="block";
+    }
 
-				<aside class="app-sidebar">
-					<div class="app-sidebar__user">
-					    <div class="dropdown">
-							<a class="nav-link pl-2 pr-2 leading-none d-flex" data-toggle="dropdown" href="#">
-								<img alt="image" src="assets/img/avatar/avatar-1.jpeg" class=" avatar-md rounded-circle">
-								<span class="ml-2 d-lg-block">
-									<span class="text-white app-sidebar__user-name mt-5">Jessica Lee</span><br>
-									<span class="text-muted app-sidebar__user-name text-sm"> Web-Designer</span>
-								</span>
-							</a>
-						</div>
-					</div>
-					<ul class="side-menu">
-						<li class="slide">
-							<a class="side-menu__item"  data-toggle="slide" href="#"><i class="side-menu__icon fa fa-desktop"></i><span class="side-menu__label">Map</span><i class="angle fa fa-angle-right"></i></a>
-							<ul class="slide-menu">
-								<li><a class="slide-item"  href="index.html"><span>location</span></a></li>
-								<li><a class="slide-item" href="index2.html"><span>bike information</span></a></li>
-							</ul>
-						</li><li class="slide">
-							<a class="side-menu__item"  data-toggle="slide" href="#"><i class="side-menu__icon fa fa-desktop"></i><span class="side-menu__label">Rent</span><i class="angle fa fa-angle-right"></i></a>
-							<ul class="slide-menu">
-								<li><a class="slide-item"  href="index.html"><span>enter number</span></a></li>
-								<li><a class="slide-item" href="index2.html"><span>report</span></a></li>
-							</ul>
-						</li><li class="slide">
-							<a class="side-menu__item"  data-toggle="slide" href="#"><i class="side-menu__icon fa fa-desktop"></i><span class="side-menu__label">User</span><i class="angle fa fa-angle-right"></i></a>
-							<ul class="slide-menu">
-								<li><a class="slide-item"  href="index.html"><span>profile photo</span></a></li>
-                                <li><a class="slide-item" href="index2.html"><span>account</span></a></li>
-                                <li><a class="slide-item" href="index2.html"><span>histry</span></a></li>
-							</ul>
-						</li>
-							</ul>
-						</li>
-					</ul>
-				</aside>
+    function hideDiv(){
+    document.getElementById("select_move").style.display="none";
+    }
+</script>
 
-				<div class="app-content">
-					<section class="section">
-                    	<ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Maps</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Google Maps</li>
-                        </ol>
-
-						<div class="section-body">
-							<div class="row">
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="card">
-										<div class="card-header">
-											<h4>Simple Maps</h4>
-										</div>
-										<div class="card-body">
-											<div id="simple-map" class="mapheight"></div>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="card">
-										<div class="card-header">
-											<h4>Context menu</h4>
-										</div>
-										<div class="card-body">
-											<div id="map" class="mapheight"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="card">
-										<div class="card-header">
-											<h4>Marker Map</h4>
-										</div>
-										<div class="card-body">
-											<div id="map1" class="mapheight"></div>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="card">
-										<div class="card-header">
-											<h4> Fusion layers Map</h4>
-										</div>
-										<div class="card-body">
-											<div id="map2" class="mapheight"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="card">
-										<div class="card-header">
-											<h4>Style Map</h4>
-										</div>
-										<div class="card-body">
-											<div id="map3" class="mapheight"></div>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<div class="card">
-										<div class="card-header">
-											<h4>Distance Map</h4>
-										</div>
-										<div class="card-body">
-											<div id="map4" class="mapheight"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-
-						</div>
-					</section>
-				</div>
-
-				<footer class="main-footer">
-					<div class="text-center">
-						Copyright &copy;Kharna-Admin 2018. Design By<a href="https://spruko.com/"> Spruko</a>
-					</div>
-				</footer>
-
-			</div>
-		</div>
-
-		<!--Jquery.min js-->
-		<script src="file/js/jquery.min.js"></script>
-
-
-		<!--Sidemenu js-->
-		<script src="file/js/sidemenu.js"></script>
-
-		<!--Maps js-->
-
-		<script src="https://maps.google.com/maps/api/js?key=AIzaSyAykAdIIsNMu0V2wyGOMQcguo8zKngWlyM"></script>
-		<script src="assets/js/jquery.googlemap.js"></script>
-
-		<!--Scripts js-->
-		<script src="file/js/scripts.js"></script>
-
-	</body>
+</body>
 </html>

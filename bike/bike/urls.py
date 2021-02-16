@@ -31,5 +31,7 @@ urlpatterns = [
     path('defective/', views.defective),  # 用于打开注册页面
     path('defective/dd', views.dd),
     path('bikemap/', views.bikemap),
+    path('movebike/', views.movebike),
+    path('movebike/move', views.move),
 ]
 urlpatterns += staticfiles_urlpatterns()
