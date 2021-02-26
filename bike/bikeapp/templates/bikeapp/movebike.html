@@ -16,10 +16,12 @@
         display:none
     }
 </style>
+<form action="select" method="POST">
     <table border="1" width="30%" cellpadding="0" cellspacing="0" bgcolor="#f0ffff" align="center">
         <caption>Bike Information</caption>
         <thead>
             <tr bgcolor="#ff7f50">
+
                 <th>Bike ID</th>
                 <th>Bike status</th>
                 <th>Bike latitude</th>
@@ -28,11 +30,11 @@
                 <th>Bike usage</th>
             </tr>
         </thead>
-
         <tbody align="center">
         {% for bike_info in allbikes %}
              <tr>
-                <td>{{bike_info.bID}}</td>
+
+                <td><input name="select_bid" type="checkbox" value="{{bike_info.bID}}">{{bike_info.bID}}</td>
                 <td>{{bike_info.bstatus}}</td>
                 <td>{{bike_info.bGPSx}}</td>
                  <td>{{bike_info.bGPSy}}</td>
@@ -40,8 +42,13 @@
                 <td>{{bike_info.busage}}</td>
             </tr>
         {% endfor %}
+        <td>
+            <input type="text" name="select_barea" placeholder=" which area">
+            <input type="submit" name="select_submit" value="submit">
+        </td>
         </tbody>
 </table>
+</form>
 <table border="1" width="30%" cellpadding="0" cellspacing="0" bgcolor="#f0ffff" align="center">
         <caption>Bike area and amount</caption>
         <thead>
@@ -63,15 +70,15 @@
                 <td>{{i}}!</td>
             </tr>
         {% endfor %}
-<button type="button" onclick="outDiv()">move bike</button>
+<!--<button type="button" onclick="outDiv()">move bike</button>-->
 <form action="move" method="get">
     <div id="select_move">
-        <input type="text" name="bID" placeholder="Please type a bikeID that you want to remove">
+        <input type="text" name="bid" placeholder="Please type a bikeID that you want to remove">
 <!--        如果没有id就报错！-->
 
         <span>TO</span>
 
-        <input type="text" name="barea" placeholder=" which area">
+        <input type="text" name="barea" placeholder=" which area" id="move_area_box">
         <!--<select>
             <option value="A">area A</option>
             <option value="B">area B</option>
@@ -79,19 +86,30 @@
             <option value="D">area D</option>
         </select>
         <button>confirm</button>-->
-        <input type="submit" name="submit1" value="submit">
+        <input type="submit" name="submit1" value="submit" onclick="handle()>
         <!--<button onclick="hideDiv()">cancel</button>-->
     </div>
+
     </form>
-
 <script>
-    function outDiv(){
-    document.getElementById("select_move").style.display="block";
+function handle(){
+    var move_area = {{ move_area|safe }};
+    if(move_area == 'A' || move_area == 'B' || move_area == 'C'|| move_area == 'D'|| move_area == 'E')
+    {
+      alert("Succeed!");
     }
+    else {
+    alert("Wrong!") //在点击确定后就zhi会把光标返dao到zhuan文本框中
+    document.getElementById("move_area_box").focus();
+<!--    return false-->
+}
+<!--    function outDiv(){-->
+<!--    document.getElementById("select_move").style.display="block";-->
+<!--    }-->
 
-    function hideDiv(){
-    document.getElementById("select_move").style.display="none";
-    }
+<!--    function hideDiv(){-->
+<!--    document.getElementById("select_move").style.display="none";-->
+<!--    }-->
 </script>
 
 </body>

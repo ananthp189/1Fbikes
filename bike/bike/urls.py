@@ -32,6 +32,7 @@ urlpatterns = [
     path('defective/dd', views.dd),
     path('bikemap/', views.bikemap),
     path('movebike/', views.movebike),
-    path('movebike/move', views.move),
+    # path('movebike/move', views.move),
+    path('movebike/select', views.select),
 ]
 urlpatterns += staticfiles_urlpatterns()
