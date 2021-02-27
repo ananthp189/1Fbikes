@@ -30,5 +30,12 @@ urlpatterns = [
     path('index/', views.main), 
     path('defective/', views.defective),  # ????????
     path('defective/dd', views.dd),
+    path('maps/', views.bikemap),       ##Map
+    path('rent/', views.rent),          ##Rent Bike Module
+    path('move/',views.move)            ## Move Bike Module
+    path('DataVisualation/',views.datavisualation)
+
+
+
 ]
 urlpatterns += staticfiles_urlpatterns()
