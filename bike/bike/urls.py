@@ -13,9 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# from django.contrib import admin
+# from django.urls import path
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from bikeapp import views
+from django.conf.urls import url
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', views.login),  # Used to open the login page
+    path('register/', views.register),  # Used to open the register page
+    path('register/save', views.save),  # After entering the user name and password, hand it to the background save function for processing
+    path('login/query', views.query),  # After entering the user name and password, hand it to the background query function for processing
+    path('index/', views.main), 
+    path('defective/', views.defective),  # ????????
+    path('defective/dd', views.dd),
 ]
+urlpatterns += staticfiles_urlpatterns()

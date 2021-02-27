@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="bike1f" content="width=device-width, initial-scale=1">
+		<title>Defective</title>
+		<!--Bootstrap.min css to adjust center-->
+		<!--<link rel="stylesheet" href="/bikeapp/style/css/bootstrap.min.css">-->
+		<!--Style css to color/photo/style-->
+<!--		<link rel="stylesheet" href="/bikeapp/style/css/bootstrap.min.css">-->
+	 	{% load static %}
+		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+		<!--<link rel="stylesheet" href="{% static 'css/icons.css' %}" />-->
+		<link rel="stylesheet" href="{% static 'css/sidemenu.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+		<script src="{% static 'js/jquery.min.js' %}"></script>
+		<script src="{% static 'js/scripts.min.js' %}"></script>
+		<script src="{% static 'js/sidemenu.min.js' %}"></script>
+		<!--<img src="{% static 'img/img14.jpg' %} ">-->
+		<!--<img src="{% static 'img/logo.png' %} ">-->
+	</head>
+
+	<body class="bg-primary">
+		<div id="app">
+
+			<section class="section section-2">
+				<div class="container">
+					<div class="single-page single-pageimage construction-bg cover-image " data-image-src="assets/img/news/img14.jpg">
+						<div class="wrapper wrapper2">
+							<form action="dd" method="get" class="card-body" tabindex="500">
+								<h3>Report to repair</h3>
+								<div class="mail">
+									<input type="text" name="BikeID">
+									<label>Please input Bike ID(Behind the bicycle seat)</label>
+								</div>
+
+								<div class="passwd">
+									<input type="text" name="Bikeproblem">
+									<label>Describe problem:</label>
+								</div>
+								<div class="submit">
+									<input class="btn btn-primary btn-block" type="submit" name="submitr" value="Report" >
+								</div>
+								<p class="mb-2"><a href="../register.html" >other problem?</a></p>
+							</form>
+							{% if has_report == 1 %}
+							<p class="form"><center><font color="#FF0000">Success!</font></center>
+							<center><font color="#FF0000">We have reported the problem to the administrator!</font></center>
+							{% endif %}
+							{% if has_report == 0 %}
+							<p class="form"><center><font color="#FF0000">Report error！cannot find this bike!</font></center>
+							{% endif %}
+						</div>
+					</div>
+					<div class="simple-footer mt-5 text-white">
+						Copyright &copy; psd tapp lab 17 ada 2021
+
+				</div>
+
+				</div>
+
+			</section>
+
+		</div>
+
+
+
+
+
+	</body>
+</html>
