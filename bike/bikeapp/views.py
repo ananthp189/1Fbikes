@@ -298,3 +298,42 @@ def rent(request, userid):
 
     print(user["uarea"], bike["bID"])
     return HttpResponse("This is the rent a bike page")
+    
+    
+    #return bike after renting and using
+def returnBike(request):
+    #Setup database connection
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+
+    #Get user and bike from global id
+    cursor.execute("SELECT * FROM customer_info WHERE ID = %s", int(ID))
+    user = cursor.fetchone()
+    
+    cursor.execute("SELECT * FROM bike_info WHERE ID = %s", int(BID))
+    bike = cursor.fetchone()
+
+    # set the bike status to available
+
+    cursor.execute("SELECT * FROM bike_info WHERE busage != 0 AND bstatus = 0 ")
+
+    bikes = cursor.fetchall()
+    
+    
+    
+    # set bike as returned
+
+    cursor.execute("UPDATE bike_info SET busage = 0 WHERE bID = %s", int(BID))
+    db.commit()
+
+
+    # with global id get user
+    # return bike based on user current location
+    # record end time
+    sql2 = "update pay_info ( endtime, endGPSx, endGPSy) VALUES ( %s, %s, %s) where  id= %s and bID= %s"
+    cursor.execute(sql2,  time.time(), user["uGPSx"], user["uGPSy"],int(ID),int(BID))
+
+    bikeid = bike["bID"]
+
+    return render(request, 'bikeapp/returnbike.html', {'bike_id': bikeid})  
+
