@@ -123,7 +123,7 @@ def query(request):
         global username1
         username1 = username
         # Define global variables! ! ! ! ! ! !!!!!!!!
-        return render(request, 'bikeapp/main_page_map.html', {'has_user': has_user, 'userName': username})
+        return render(request, 'bikeapp/index.html', {'has_user': has_user, 'userName': username})
 
      # return HttpResponse('login success')
     else:
@@ -184,13 +184,13 @@ def pay(request):
     start = 1201
     end = 1306
     bduration = end - start
-    count = bduration // 100 # get the hour
-    original_bill = count * 0.5 # 0.5 pounds an hour
+    count = bduration // 100           # get the hour
+    original_bill = count * 0.5         # 0.5 pounds an hour
     if totaltime >= 500:
-        discount_bill = original_bill * 0.8 # discount, 80% off
+        discount_bill = original_bill * 0.8   # discount, 80% off
     else:
-        discount_bill = original_bill # no discount
-        # 存入数据库
+        discount_bill = original_bill      # no discount
+        # Update Database
 
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     # Create cursor
@@ -454,6 +454,7 @@ def locationmap(request):
 #--------------- Rent Bike Module  ----------------------#
 
 def rent(request):
+
     #Setup database connection
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor(pymysql.cursors.DictCursor)

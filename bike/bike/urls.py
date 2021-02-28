@@ -34,7 +34,7 @@ urlpatterns = [
     path('movebike/', views.movebike),
     path('movebike/select', views.select),
     path('locationmap/',views.locationmap),
-    path('return/', views.returnbike),   #Return bike using users id number
+    path('return/', views.returnBike),   #Return bike using users id number
     path('rent/', views.rent),           # Rent a bike using users id number
 
 ]
