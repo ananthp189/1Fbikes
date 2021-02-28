@@ -28,6 +28,9 @@ def main(request):
     return render(request,'bikeapp/index.html')
 
 
+def dataVis (request) :
+    return render(request, 'bikeapp/datavisualization.html')
+
 # login function save method
 
 def save(request):
@@ -399,8 +402,7 @@ def select(request):
     return render(request, 'bikeapp/movebike.html',{'move_area': json.dumps(select_move_area)})
 
 
-def DataVis (request) :
-    return render(request, 'bikeapp/payment_heatmap.html')
+
 
 
 #---------------Track bikes module  ----------------------#
