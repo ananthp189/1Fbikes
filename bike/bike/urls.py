@@ -28,11 +28,14 @@ urlpatterns = [
     path('register/save', views.save),  # After entering the user name and password, hand it to the background save function for processing
     path('login/query', views.query),  # After entering the user name and password, hand it to the background query function for processing
     path('mainpage/', views.main),
-    path('defective/', views.defective),  # 用于打开注册页面
+    path('defective/', views.defective),  #Open the Registration page
     path('defective/dd', views.dd),
     path('bikemap/', views.bikemap),
     path('movebike/', views.movebike),
-    # path('movebike/move', views.move),
     path('movebike/select', views.select),
+    path('locationmap/',views.locationmap),
+    path('return/', views.returnbike),   #Return bike using users id number
+    path('rent/', views.rent),           # Rent a bike using users id number
+
 ]
 urlpatterns += staticfiles_urlpatterns()

@@ -1,4 +1,6 @@
 import json
+import math
+import time
 
 from django.shortcuts import render
 
@@ -191,7 +193,7 @@ def pay(request):
         # 存入数据库
 
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-    # 创建游标
+    # Create cursor
     cursor = db.cursor()
     sql2 = 'insert into pay_info(pID,pstatus,starttime, endtime, duration, oribill, discount, ID, bID) values(%s,%s,%s,%s,%s,%s,%s,%s,%s)'
     cursor.execute(sql2, (payid, status, start, end, bduration, original_bill, discount_bill,ID, bID))
@@ -199,7 +201,7 @@ def pay(request):
     cursor.close()
     db.close()
 
-    #按钮返回值
+    #Return value
     p = request.GET
     submit1 = p.get('subtype')
     if submit1 == 1:
@@ -207,21 +209,22 @@ def pay(request):
         status = 1
         buse = 0  # in bike chart
         totaltime = totaltime + count * 60 + (bduration % 100)
-    # 存入数据库
 
-    #更新支付状态 payment
+    # Update the databse
+
+    #Update payment
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor()
     sql3 = 'UPDATE pay_info SET pstatus=%s where pID=%s'
     cursor.execute(sql3, (status, payid))
     db.commit()
 
-    #更新累计时间 user
+    #Update user time
     sql3 = 'UPDATE customer_info SET renttime=%s where ID=%s'
     cursor.execute(sql3, (totaltime, ID))
     db.commit()
 
-    # 更新自行车状态 bike
+    # Update bike status
     sql4 = 'UPDATE bike_info SET bstatus=%s where bID=%s'
     cursor.execute(sql4, (buse, bID))
     db.commit()
@@ -244,10 +247,11 @@ def bikemap(request):
     sqlGPS = 'select bGPSx,bGPSy from bike_info'
     cursor.execute(sqlGPS)
     bikesGPS = cursor.fetchall()
+    #close cursor
     cursor.close()
-    # 关闭游标
+    # close database
     db.close()
-    # 关闭数据库
+
     allbikes_list = []
     for i in range(len(all_bikes)):
         #list() to replace dict.value to list
@@ -275,8 +279,9 @@ def movebike(request):
     cursor = db.cursor(pymysql.cursors.DictCursor)
     sql = 'select bID, bstatus, bGPSx,bGPSy, barea, busage from bike_info'
     cursor.execute(sql)
+    # All data from the database
     all_bikes = cursor.fetchall()
-    # 查询结果全部返回
+
     ###################li------add-----------
     area_list = []
     for a in all_bikes:
@@ -285,7 +290,7 @@ def movebike(request):
     for b in set(area_list):
         result[b] = area_list.count(b)
     print(list(result.items()))
-    #假设每个区域标准80辆车，显示车辆不足区域
+    #Assuming that there are 80 bikes in each area, the area with insufficient vehicles is displayed
     normal = 80
     warn_list = []
     for i in result.items():
@@ -299,10 +304,11 @@ def movebike(request):
             warn_list.append(x)
     #print(warn_list)
     ######################
+    #close cursor
     cursor.close()
-    # 关闭游标
+    #close database
     db.close()
-    # 关闭数据库
+
     # print(all_bikes)
     return render(request, 'bikeapp/movebike.html',{'allbikes': all_bikes, 'result': result.items(),'warn':warn_list})
 
@@ -356,13 +362,13 @@ def select(request):
     a = request.POST
     #b = request.REQUEST.get
     select_move_bid = request.POST.getlist('select_bid')
-    print("看这里！！！", select_move_bid)
+    print("Here！！！", select_move_bid)
     select_move_area = a.get('select_barea')
     print(select_move_area)
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor()
     for i in select_move_bid:
-         #随机生成gps
+         #Randomly generated gps
         global gpsx, gpsy
         if select_move_area == 'A':
             gpsx = random.uniform(55.85,55.90)
@@ -397,7 +403,7 @@ def DataVis (request) :
     return render(request, 'bikeapp/payment_heatmap.html')
 
 
-# track all bikes
+#---------------Track bikes module  ----------------------#
 
 def locationmap(request):
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
@@ -411,10 +417,11 @@ def locationmap(request):
     sqlGPS = 'select bGPSx,bGPSy from bike_info'
     cursor.execute(sqlGPS)
     bikesGPS = cursor.fetchall()
+    # Close cursor
     cursor.close()
-    # 关闭游标
+    #close database
     db.close()
-    # 关闭数据库
+
     allbikes_list = []
     for i in range(len(all_bikes)):
         # list() to replace dict.value to list
@@ -438,8 +445,106 @@ def locationmap(request):
     cursor.execute(sql)
     all_bikes = cursor.fetchall()
     cursor.close()
-    # 关闭游标
+    # Close database
     db.close()
     #
     return render(request, 'bikeapp/locationmap.html'),
+
+
+#--------------- Rent Bike Module  ----------------------#
+
+def rent(request):
+    #Setup database connection
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+
+    #Get user from global id
+    cursor.execute("SELECT * FROM customer_info WHERE ID = %s", int(ID))
+    user = cursor.fetchone()
+
+    # fetch all bikes
+    # calculate all the distances between user and bikes
+    # choose the bike with the minimum distance
+
+    cursor.execute("SELECT * FROM bike_info WHERE busage = 0 AND bstatus = 0")
+
+    bikes = cursor.fetchall()
+    mindistance = None
+    bike = None
+
+    # for every bike calculate the distance between user and bike
+    # if the minimum distance is none or less than distance
+    # set the mindistance to distance
+    # set bike to availablebike
+
+    for availableBike in bikes:
+        distancex = pow((float(user["uGPSx"])-float(availableBike["bGPSx"])),2)
+        distancey = pow((float(user["uGPSy"]) - float(availableBike["bGPSy"])), 2)
+        distance = math.sqrt(distancex + distancey)
+        if not isinstance(mindistance, float) or distance < mindistance:
+            mindistance = distance
+            bike = availableBike
+
+
+    print(bike)
+
+    cursor.execute("UPDATE bike_info SET busage = 1 WHERE bID = %s", int(bike["bID"]))
+    db.commit()
+
+
+    # with global id get user
+    # assign bike based on user area
+    # record start time
+    sql2 = "INSERT INTO pay_info (ID, bID, starttime, startGPSx, startGPSy) VALUES (%s, %s, %s, %s, %s)"
+    cursor.execute(sql2, (user["ID"], bike["bID"], time.time(), bike["bGPSx"], bike["bGPSy"]))
+
+    bikeid = bike["bID"]
+    bikepin = bike["bpassword"]
+
+    global BID
+    BID = bike["bID"]
+
+    return render(request, 'bikeapp/rentbike.html', {'bike_id': bikeid,'bike_pin': bikepin})
+
+
+
+
+
+#--------------- Return Bike Module  ----------------------#
+
+#return a bike function
+
+# return bike after renting and using the bike
+
+def returnBike(request):
+    # Setup database connection
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+
+    # Get user and bike details from global id
+    cursor.execute("SELECT * FROM customer_info WHERE ID = %s", int(ID))
+    user = cursor.fetchone()
+
+    cursor.execute("SELECT * FROM bike_info WHERE ID = %s", int(BID))
+    bike = cursor.fetchone()
+
+    # set the fetched bike to returned status
+
+    cursor.execute("UPDATE bike_info SET busage = 0 WHERE bID = %s", int(BID))
+    db.commit()
+    # return bike based on user current location
+    # record end time and update the table
+    sql2 = "update pay_info ( endtime, endGPSx, endGPSy) VALUES ( %s, %s, %s) where  id= %s and bID= %s"
+    cursor.execute(sql2, time.time(), user["uGPSx"], user["uGPSy"], int(ID), int(BID))
+
+    # assign charge and discount
+    pay()
+
+    bikeid = bike["bID"]
+    return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid})  ,
+
+
+
+
+
 
