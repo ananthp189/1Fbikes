@@ -389,3 +389,7 @@ def select(request):
     #text
     # print(select_move_bid)
     return render(request, 'bikeapp/movebike.html',{'move_area': json.dumps(select_move_area)})
+
+
+def DataVis (request) :
+    return render(request, 'bikeapp/payment_heatmap.html')
