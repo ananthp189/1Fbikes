@@ -268,6 +268,7 @@ def bikemap(request):
 
 
 ###########movebike-collect data########
+
 def movebike(request):
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     # add “pymysql.cursors.DictCursor” to pass variables to web-front
@@ -350,6 +351,7 @@ def movebike(request):
 
 
 #----------------select-------------------
+
 def select(request):
     a = request.POST
     #b = request.REQUEST.get
@@ -393,3 +395,51 @@ def select(request):
 
 def DataVis (request) :
     return render(request, 'bikeapp/payment_heatmap.html')
+
+
+# track all bikes
+
+def locationmap(request):
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    # add “pymysql.cursors.DictCursor” to pass variables to web-front
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    # search bike information to show to managers.
+    sql = 'select bID,bstatus,  barea, bpassword, busage from bike_info'
+    cursor.execute(sql)
+    all_bikes = cursor.fetchall()
+    # select gpsx and gpsy for drawing in the map
+    sqlGPS = 'select bGPSx,bGPSy from bike_info'
+    cursor.execute(sqlGPS)
+    bikesGPS = cursor.fetchall()
+    cursor.close()
+    # 关闭游标
+    db.close()
+    # 关闭数据库
+    allbikes_list = []
+    for i in range(len(all_bikes)):
+        # list() to replace dict.value to list
+        allbikes_list.append(list(all_bikes[i].values()))
+
+    print(allbikes_list)
+    bGPS = []
+    for i in range(len(bikesGPS)):
+        bGPS.append(list(bikesGPS[i].values()))
+    for i in range(len(bGPS)):
+        for j in range(2):
+            bGPS[i][j] = (bGPS[i][j])
+    print("_-_")
+    print(bGPS)
+
+    #---------------add table - ---------------------
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    # add “pymysql.cursors.DictCursor” to pass variables to web-front
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    sql = 'select bID, bstatus, barea,bpassword, busage from bike_info'
+    cursor.execute(sql)
+    all_bikes = cursor.fetchall()
+    cursor.close()
+    # 关闭游标
+    db.close()
+    #
+    return render(request, 'bikeapp/locationmap.html'),
+
