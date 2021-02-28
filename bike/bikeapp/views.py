@@ -23,7 +23,7 @@ def register(request):
     return render(request,'bikeapp/register.html')
 
 def main(request):
-    return render(request,'bikeapp/main_page_map.html')
+    return render(request,'bikeapp/index.html')
 
 
 # login function save method

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Marker Icons</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script>
+          function initialize() {
+          <!--pass values from web-end-->
+          var bikeGPS = {{ bikeGPS|safe }};
+          var bikesinfo = {{bikesinfo|safe }}
+
+          <!--judge bikes' status and usage-->
+          var i;
+          for (i=0;i<bikesinfo.length;i++){
+              if (bikesinfo[i][1] == '2'){
+              bikesinfo[i][1] ='good to use'
+              } else if(bikesinfo[i][1] == '0'){
+              bikesinfo[i][1] ='broke down'
+              }else if(bikesinfo[i][1] == '1'){
+              bikesinfo[i][1] ='repairing'
+              }
+
+              if(bikesinfo[i][4] == '0'){
+              bikesinfo[i][4] ='unoccupied'
+              }else{
+              bikesinfo[i][4] ='occupied'
+              }
+          }
+
+          <!--show the google map-->
+          var map = new google.maps.Map(document.getElementById('map'), {
+           <!--zoom缩放，越大越精细-->
+              zoom: 16,
+              center: new google.maps.LatLng(55.87189, -4.28922),
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+           });
+
+            <!--draw bikes‘ location-->
+           var infowindow = new google.maps.InfoWindow();
+           var marker, i;
+           for (i = 0; i < bikeGPS.length; i++) {
+              marker = new google.maps.Marker({
+                position: new google.maps.LatLng(bikeGPS[i][0], bikeGPS[i][1]),
+                map: map
+              });
+
+             <!--call bindInfoWindow to show content in markers-->
+             var content_title = ['bike ID: ','bike status: ','bike area: ','bike password: ', 'bike usage: ']
+             bindInfoWindow(marker, map, infowindow,"<p>" + content_title[0]+ bikesinfo[i][0] +"</p>"
+                 +"<p>" + content_title[1]+ bikesinfo[i][1] +"</p>"
+                 +"<p>" + content_title[2]+ bikesinfo[i][2] +"</p>"
+                 +"<p>" + content_title[3]+ bikesinfo[i][3] +"</p>"
+                 +"<p>" + content_title[4]+ bikesinfo[i][4] +"</p>"
+             );
+
+           }
+    }
+
+            <!--listener mouse-->
+            function bindInfoWindow(marker, map, infowindow, html) {
+            google.maps.event.addListener(marker, 'mouseover', function() {
+               infowindow.setContent(html);
+                infowindow.open(map, marker);
+            });
+            google.maps.event.addListener(marker, 'mouseout', function() {
+                infowindow.close();
+            });
+}
+
+          <!--load the map-->
+          function loadScript() {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&' + 'callback=initialize';
+            document.body.appendChild(script);
+          }
+
+          window.onload = loadScript;
+        </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3vT3UOTtr5GYl6yqo3wLfmaiElz66hIw&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+  </body>
+</html>
