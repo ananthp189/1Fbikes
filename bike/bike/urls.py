@@ -30,12 +30,12 @@ urlpatterns = [
     path('mainpage/', views.main),
     path('defective/', views.defective),  #Open the Registration page
     path('defective/dd', views.dd),
-    path('bikemap/', views.bikemap),
+    path('login/bikemap/', views.bikemap),
     path('movebike/', views.movebike),
     path('movebike/select', views.select),
     path('locationmap/',views.locationmap),
-    path('return/', views.returnBike),   #Return bike using users id number
-    path('rent/', views.rent),          # Rent a bike using users id number
-    path('datavisualization/',views.dataVis),
+    path('login/return/', views.returnBike),   #Return bike using users id number
+    path('login/rent/', views.rent),          # Rent a bike using users id number
+    path('login/datavisualization/',views.dataVis),
 ]
 urlpatterns += staticfiles_urlpatterns()
