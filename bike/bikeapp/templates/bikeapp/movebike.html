@@ -74,7 +74,7 @@
 <form action="move" method="get">
     <div id="select_move">
         <input type="text" name="bid" placeholder="Please type a bikeID that you want to remove">
-<!--        如果没有id就报错！-->
+<!--        Report error if there is no id ！-->
 
         <span>TO</span>
 
@@ -99,9 +99,9 @@ function handle(){
       alert("Succeed!");
     }
     else {
-    alert("Wrong!") //在点击确定后就zhi会把光标返dao到zhuan文本框中
+    alert("Wrong!") //After clicking OK, the cursor will return to the cursor to textbox
     document.getElementById("move_area_box").focus();
-<!--    return false-->
+<!--return false-->
 }
 <!--    function outDiv(){-->
 <!--    document.getElementById("select_move").style.display="block";-->

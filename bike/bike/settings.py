@@ -81,10 +81,10 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bikerental',			# 数据库名称
-        'USER': 'root',       		# 名字
-        'PASSWORD': '123123',       # 密码
-        'HOST': 'localhost',		# 可以不写，默认的
+        'NAME': 'bikerental',			# Database name
+        'USER': 'root',       		    # Username
+        'PASSWORD': '123123',           # Password
+        'HOST': 'localhost',		    # The default one
     }
 }
 
@@ -120,7 +120,7 @@ USE_I18N = True
 USE_L10N = True
 
 # USE_TZ = True
-USE_TZ = False # 新设置
+USE_TZ = False #New setting
 
 
 # Static files (CSS, JavaScript, Images)
@@ -128,16 +128,16 @@ USE_TZ = False # 新设置
 
 STATIC_URL = '/static/'
 
-# 当运行 python manage.py collectstatic 的时候
-# STATIC_ROOT 文件夹 是用来将所有STATICFILES_DIRS中所有文件夹中的文件，以及各app中static中的文件都复制过来
-# 把这些文件放到一起是为了用apache等部署的时候更方便
+# When running python manage.py collectstatic 的时候
+# STATIC_ROOT folder is used to copy all the file  and the files in static in each app are copied over
+# Putting these files together is to make it easier to deploy with apache
 # STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\', '/')
 STATIC_ROOT = os.path.join(BASE_DIR, 'collect_static')
-# 文件名为os.path.join(BASE_DIR, "static")中的static
+# the file name is static in os.path.join(BASE_DIR, "static")
 # os.path.join(BASE_DIR, "common_static")
-# 把 jquery.js 放在 common_static/js/ 下，这样就可以 在 /static/js/jquery.js 中访问到它！
-# 也可以在 settings.py 中指定所有 app 共用的静态文件，比如 jquery.js 等.common_static文件夹
+#Put jquery.js under common_static/js/ so that you can access it in /static/js/jquery.js!
+#You can also specify static files shared by all apps in settings.py, such as jquery.js etc. common_static folder
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "common_static"),
     # ('css', os.path.join(STATIC_ROOT, 'css').replace('\\', '/')),
@@ -145,8 +145,9 @@ STATICFILES_DIRS = (
     # ('font', os.path.join(STATIC_ROOT, 'font').replace('\\', '/')),
 )
 
-# 这个是默认设置，Django 默认会在 STATICFILES_DIRS中的文件夹 和 各app下的static文件夹中找文件
-# 注意有先后顺序，找到了就不再继续找了
+#Default setting.
+# By default, Django will find files in the folders in STATICFILES_DIRS
+# and the static folders under each app
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder"
