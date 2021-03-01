@@ -1,12 +1,12 @@
 import json
 import math
 import time
+import datetime
 
 from django.shortcuts import render
-
 # Create your views here.
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import pymysql
 import pymysql.cursors
 import os
@@ -24,15 +24,15 @@ def login(request):
 def register(request):
     return render(request,'bikeapp/register.html')
 
+# main page for customers login
 def main(request):
     return render(request,'bikeapp/index.html')
 
-
+# data visualization page
 def dataVis (request) :
     return render(request, 'bikeapp/datavisualization.html')
 
 # login function save method
-
 def save(request):
     has_register = 0#Used to record whether the current account already exists, 0: does not exist 1: already exists
     a = request.GET#Get get() request
@@ -106,13 +106,13 @@ def query(request):
     has_user = 0
     i = 0
     while i < len(all_users):
-        print("!!!!!!!!!!!!!!!!!!!!!!")
-        print(all_users[i])
+        # print("!!!!!!!!!!!!!!!!!!!!!!")
+        # print(all_users[i])
         if user_tup == all_users[i]:
             has_user = 1
         i += 1
-        print("############################")
-        print(has_user)
+        # print("############################")
+        # print(has_user)
     if has_user == 1:
         # Query the name of the user account
         db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
@@ -168,74 +168,91 @@ def dd(request):
 
     return render(request,'bikeapp/defective.html',{'has_report': has_report})
 
+
+
 # payment
-
-
 def payment(request):
-
     return render(request,'bikeapp/pay.html')
 
 
 def pay(request):
     # creat paymentid
-    bID = 102 # get from rentbike function set a global various
-    payid = random.sample(range(10002,11000),1)
+    bID = 317 # get from rentbike function set a global various
+    #payid = random.sample(range(10002,91000),1)
+    payid = 2007 # get from rentbike function set a global various
     # set payment status
     status = 0
     # duration
-    totaltime = 612
-    start = 1201
-    end = 1306
-    bduration = end - start
-    count = bduration // 100           # get the hour
-    original_bill = count * 0.5         # 0.5 pounds an hour
-    if totaltime >= 500:
-        discount_bill = original_bill * 0.8   # discount, 80% off
-    else:
-        discount_bill = original_bill      # no discount
-        # Update Database
-
+    totaltime = 612  # get from user function set a global various
+    #get start time
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-    # Create cursor
+    cursor5 = db.cursor(pymysql.cursors.DictCursor)
+    sql1 = 'select starttime from pay_info where pID ="{}"'
+    sql2 = sql1.format(payid)
+    cursor5.execute(sql2)
+    startt = cursor5.fetchall()
+    starttime = datetime.datetime.strptime(startt[0]["starttime"], "%Y-%m-%d %H:%M:%S")
+    #get end time
+    sql3 = 'select endtime from pay_info where pID ="{}"'
+    sql4 = sql3.format(payid)
+    cursor5.execute(sql4)
+    endt = cursor5.fetchall()
+    # print("!!!!!", endt)
+    endtime = datetime.datetime.strptime(endt[0]["endtime"], "%Y-%m-%d %H:%M:%S")
+    print("!!!!!", endtime)
+    cursor5.close()
+    db.close()
+
+    # computed duration time
+    bduration = endtime - starttime
+    # count = bduration // 100 # get the hour
+    original_bill = bduration * 0.01  # 0.01 pounds a minute
+    if totaltime >= 500:
+        discount_bill = original_bill * 0.8 # discount, 80% off
+    else:
+        discount_bill = original_bill # no discount
+
+#   #inupt duration, original bill, discount bill
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    # 创建游标
     cursor = db.cursor()
-    sql2 = 'insert into pay_info(pID,pstatus,starttime, endtime, duration, oribill, discount, ID, bID) values(%s,%s,%s,%s,%s,%s,%s,%s,%s)'
-    cursor.execute(sql2, (payid, status, start, end, bduration, original_bill, discount_bill,ID, bID))
+    sql5 = 'UPDATE pay_info SET duration=%s, oribill=%s, discount=%s  where pID=%s'
+    cursor.execute(sql5, (bduration, original_bill, discount_bill, payid))
     db.commit()
     cursor.close()
     db.close()
 
-    #Return value
+    #button return
+    #<button class="" type="submit" name="subtype" value="1"> payment</button> in html
     p = request.GET
     submit1 = p.get('subtype')
     if submit1 == 1:
-        put = 1
-        status = 1
+        put = 1 # return various
+        status = 1  # pay successful
         buse = 0  # in bike chart
-        totaltime = totaltime + count * 60 + (bduration % 100)
+        totaltime = totaltime + bduration
+    # database
 
-    # Update the databse
-
-    #Update payment
+    #update payment status
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor()
     sql3 = 'UPDATE pay_info SET pstatus=%s where pID=%s'
     cursor.execute(sql3, (status, payid))
     db.commit()
 
-    #Update user time
+    #update user status
     sql3 = 'UPDATE customer_info SET renttime=%s where ID=%s'
     cursor.execute(sql3, (totaltime, ID))
     db.commit()
 
-    # Update bike status
-    sql4 = 'UPDATE bike_info SET bstatus=%s where bID=%s'
+    # update  bike status
+    sql4 = 'UPDATE bike_info SET busage=%s where bID=%s'
     cursor.execute(sql4, (buse, bID))
     db.commit()
     cursor.close()
     db.close()
 
-    return render(request,'bikeapp/pay.html', {'payid': payid, 'time': count, 'original_bill': original_bill, 'discount_bill': discount_bill, 'put':put })
-
+    return render(request,'bikeapp/pay.html', {'payid': payid, 'time': bduration, 'original_bill': original_bill, 'discount_bill': discount_bill, 'put':put })
 
 #show bike map-- Front and back interaction
 def bikemap(request):
@@ -314,49 +331,6 @@ def movebike(request):
 
     # print(all_bikes)
     return render(request, 'bikeapp/movebike.html',{'allbikes': all_bikes, 'result': result.items(),'warn':warn_list})
-
-
-#---------------movebike_action--------#
-# def move(request):
-#     a = request.GET
-#     move_bid = a.get('bid')
-#     move_area = a.get('barea')
-#     global gpsx, gpsy
-#     if move_area == 'A':
-#         gpsx = random.uniform(55.85,55.90)
-#         gpsy = random.uniform(-4.15,-4.26)
-#     elif move_area == 'B':
-#         print("aaaaaaaaaa")
-#         gpsx = random.uniform(55.90,55.95)
-#         gpsy = random.uniform(-4.26,-4.31)
-#     elif move_area == 'C':
-#         gpsx = random.uniform(55.90,55.95)
-#         gpsy = random.uniform(-4.0,-4.15)
-#     elif move_area == 'D':
-#         gpsx = random.uniform(55.81,55.85)
-#         gpsy = random.uniform(-4.26,-4.31)
-#     elif move_area == 'E':
-#         gpsx = random.uniform(55.81,55.85)
-#         gpsy = random.uniform(-4.0,-4.15)
-#     gpsx = str(gpsx)
-#     gpsy = str(gpsy)
-#     print("GPS！！", gpsx)
-#     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-#     cursor = db.cursor()
-#     sql = 'update bike_info set barea=%s where bID=%s'
-#     cursor.execute(sql, (move_area, move_bid))
-#     db.commit()
-#     cursor.close()
-#     db.close()
-#
-#     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-#     cursor = db.cursor()
-#     sql2 = 'update bike_info set bGPSx=%s,bGPSy=%s where bID=%s'
-#     cursor.execute(sql2, (gpsx, gpsy, move_bid))
-#     db.commit()
-#     cursor.close()
-#     db.close()
-#     return HttpResponse('succeed')
 
 
 #----------------select-------------------
@@ -462,7 +436,7 @@ def rent(request):
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
     #Get user from global id
-    cursor.execute("SELECT * FROM customer_info WHERE ID = %s", int(ID))
+    cursor.execute("SELECT * FROM customer_info WHERE ID = %s", ID)
     user = cursor.fetchone()
 
     # fetch all bikes
@@ -498,8 +472,9 @@ def rent(request):
     # with global id get user
     # assign bike based on user area
     # record start time
-    sql2 = "INSERT INTO pay_info (ID, bID, starttime, startGPSx, startGPSy) VALUES (%s, %s, %s, %s, %s)"
-    cursor.execute(sql2, (user["ID"], bike["bID"], time.time(), bike["bGPSx"], bike["bGPSy"]))
+    payid = random.sample(range(10002, 91000), 1)
+    sql2 = "INSERT INTO pay_info (pID, ID, bID, starttime, startGPSx, startGPSy) VALUES (%s, %s, %s, %s, %s, %s)"
+    cursor.execute(sql2, (payid, user["ID"], bike["bID"], time.time(), bike["bGPSx"], bike["bGPSy"]))
 
     bikeid = bike["bID"]
     bikepin = bike["bpassword"]
@@ -718,8 +693,6 @@ def select(request):
         return HttpResponseRedirect('http://127.0.0.1:8000/movebike/')
 
 
-        #return messages.success(request, "nonononono!!")
-        #return HttpResponse('NONONO', select_move_bid)
 
 #---------------repair bake-------------
 def repairmap(request):
