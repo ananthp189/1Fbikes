@@ -195,8 +195,47 @@ def dd(request):
 
 
 # payment
+
 def payment(request):
-    return render(request,'bikeapp/pay.html')
+    # creat paymentid
+    bID = 317  # get from rentbike function set a global various
+    # payid = random.sample(range(10002,91000),1)
+    payid = 2007  # get from rentbike function set a global various
+    # set payment status
+    status = 0
+    # duration
+    totaltime = 612  # get from user function set a global various
+    # get start time
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    cursor5 = db.cursor(pymysql.cursors.DictCursor)
+    sql1 = 'select starttime from pay_info where pID ="{}"'
+    sql2 = sql1.format(payid)
+    cursor5.execute(sql2)
+    startt = cursor5.fetchall()
+    starttime = datetime.datetime.strptime(startt[0]["starttime"], "%Y-%m-%d %H:%M:%S")
+    # get end time
+    sql3 = 'select endtime from pay_info where pID ="{}"'
+    sql4 = sql3.format(payid)
+    cursor5.execute(sql4)
+    endt = cursor5.fetchall()
+    # print("!!!!!", endt)
+    endtime = datetime.datetime.strptime(endt[0]["endtime"], "%Y-%m-%d %H:%M:%S")
+    print("!!!!!", endtime)
+    cursor5.close()
+    db.close()
+
+    # computed duration time
+    bduration = (endtime - starttime).seconds
+    bduration = bduration / 60
+    # count = bduration // 100 # get the hour
+    original_bill = bduration * 0.01  # 0.01 pounds a minute
+    if totaltime >= 500:
+        discount_bill = original_bill * 0.8  # discount, 80% off
+    else:
+        discount_bill = original_bill  # no discount
+
+    return render(request,'bikeapp/pay.html', {'bid':bID, 'payid': payid, 'time': bduration, 'original_bill': original_bill, 'discount_bill': discount_bill})
+
 
 
 def pay(request):
@@ -228,7 +267,8 @@ def pay(request):
     db.close()
 
     # computed duration time
-    bduration = endtime - starttime
+    bduration = (endtime - starttime).seconds
+    bduration = bduration / 60
     # count = bduration // 100 # get the hour
     original_bill = bduration * 0.01  # 0.01 pounds a minute
     if totaltime >= 500:
@@ -250,11 +290,11 @@ def pay(request):
     #<button class="" type="submit" name="subtype" value="1"> payment</button> in html
     p = request.GET
     submit1 = p.get('subtype')
-    if submit1 == 1:
-        put = 1 # return various
-        status = 1  # pay successful
-        buse = 0  # in bike chart
-        totaltime = totaltime + bduration
+
+    put = 1 # return various
+    status = 1  # pay successful
+    buse = 0  # in bike chart
+    totaltime = totaltime + bduration
     # database
 
     #update payment status
@@ -276,7 +316,7 @@ def pay(request):
     cursor.close()
     db.close()
 
-    return render(request,'bikeapp/pay.html', {'payid': payid, 'time': bduration, 'original_bill': original_bill, 'discount_bill': discount_bill, 'put':put })
+    return render(request,'bikeapp/pay.html', {'bid':bID,'payid': payid, 'time': bduration, 'original_bill': original_bill, 'discount_bill': discount_bill, 'put':put })
 
 #show bike map-- Front and back interaction
 def bikemap(request):
