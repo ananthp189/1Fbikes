@@ -2,6 +2,15 @@ import json
 import math
 import time
 import datetime
+from pyecharts.charts import Pie, WordCloud
+from pyecharts import options as opts
+from pyecharts.charts import Bar
+from pyecharts.charts import Grid, Liquid
+from pyecharts.commons.utils import JsCode
+import folium
+from folium.plugins import HeatMap
+from pyecharts.faker import Faker
+import pandas as pd
 
 from django.shortcuts import render
 # Create your views here.
@@ -814,4 +823,572 @@ def locationmap(request):
     #
     return render(request, 'bikeapp/locationmap.html',
                   {'bikeGPS': json.dumps(bGPS), 'bikesinfo': json.dumps(allbikes_list),'allbikes': all_bikes})
+
+
+##### Data Visualizasion ######
+def pie_User_Structure():
+
+    conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
+    cur = conn.cursor()
+
+    cur.execute('select * from customer_info\
+                where usertype = %s', ("0"))
+
+    num_normal = len(cur.fetchall())
+    conn.commit()
+
+    cur.execute('select * from customer_info\
+                where usertype = %s', ("1"))
+
+    num_prime = len(cur.fetchall())
+    conn.commit()
+
+    cur.execute('select * from customer_info\
+                where usertype = %s', ("2"))
+
+    num_operater = len(cur.fetchall())
+    conn.commit()
+
+    cur.execute('select * from customer_info\
+                where usertype = %s', ("3"))
+
+    num_manager = len(cur.fetchall())
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    Position = ("Prime customer", "Normal customer", "Operater", "Manager")
+    Num = (num_prime, num_normal, num_operater, num_manager)
+
+    c = (
+        Pie()
+            .add(
+            "",
+            [list(z) for z in zip(Position, Num)],
+            radius=["40%", "55%"],
+            label_opts=opts.LabelOpts(
+                position="outside",
+                formatter="{a|{a}}{abg|}\n{hr|}\n {b|{b}: }{c}  {per|{d}%}  ",
+                background_color="#eee",
+                border_color="#aaa",
+                border_width=1,
+                border_radius=4,
+                rich={
+                    "a": {"color": "#999", "lineHeight": 22, "align": "center"},
+                    "abg": {
+                        "backgroundColor": "#e3e3e3",
+                        "width": "100%",
+                        "align": "right",
+                        "height": 22,
+                        "borderRadius": [4, 4, 0, 0],
+                    },
+                    "hr": {
+                        "borderColor": "#aaa",
+                        "width": "100%",
+                        "borderWidth": 0.5,
+                        "height": 0,
+                    },
+                    "b": {"fontSize": 16, "lineHeight": 33},
+                    "per": {
+                        "color": "#eee",
+                        "backgroundColor": "#334455",
+                        "padding": [2, 4],
+                        "borderRadius": 2,
+                    },
+                },
+            ),
+        )
+            .set_global_opts(title_opts=opts.TitleOpts(title="User Structure"))
+            .render("templates/bikeapp/pie_User_Structure.html")
+    )
+
+
+def pie_bike_status():
+    conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
+    cur = conn.cursor()
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("A", "0"))
+
+    num_A0 = len(cur.fetchall())
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("A", "1"))
+
+    num_A1 = len(cur.fetchall())
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("B", "0"))
+
+    num_B0 = len(cur.fetchall())
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("B", "1"))
+
+    num_B1 = len(cur.fetchall())
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("C", "0"))
+
+    num_C0 = len(cur.fetchall())
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("C", "1"))
+
+    num_C1 = len(cur.fetchall())
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("D", "0"))
+
+    num_D0 = len(cur.fetchall())
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("D", "1"))
+
+    num_D1 = len(cur.fetchall())
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("E", "0"))
+
+    num_E0 = len(cur.fetchall())
+
+    cur.execute('select * from bike_info\
+                where barea = %s and bstatus = %s', ("E", "1"))
+
+    num_E1 = len(cur.fetchall())
+
+    inner_x_data = ["A", "B", "C", "D", "E"]
+    inner_y_data = [num_A0 + num_A1, num_B0 + num_B1, num_C0 + num_C1, num_D0 + num_D1, num_E0 + num_E1]
+    inner_data_pair = [list(z) for z in zip(inner_x_data, inner_y_data)]
+
+    outer_x_data = ["A_good", "A_broken", "B_good", "B_broken", "C_good", "C_broken", "D_good", "D_broken", "E_good",
+                    "E_broken"]
+    outer_y_data = [num_A0, num_A1, num_B0, num_B1, num_C0, num_C1, num_D0, num_D1, num_E0, num_E1]
+    outer_data_pair = [list(z) for z in zip(outer_x_data, outer_y_data)]
+
+    (
+        Pie(init_opts=opts.InitOpts(width="1600px", height="800px"))
+            .add(
+            series_name="Area",
+            data_pair=inner_data_pair,
+            radius=[0, "30%"],
+            label_opts=opts.LabelOpts(position="inner"),
+        )
+            .add(
+            series_name="status",
+            radius=["40%", "55%"],
+            data_pair=outer_data_pair,
+            label_opts=opts.LabelOpts(
+                position="outside",
+                formatter="{a|{a}}{abg|}\n{hr|}\n {b|{b}: }{c}  {per|{d}%}  ",
+                background_color="#eee",
+                border_color="#aaa",
+                border_width=1,
+                border_radius=4,
+                rich={
+                    "a": {"color": "#999", "lineHeight": 22, "align": "center"},
+                    "abg": {
+                        "backgroundColor": "#e3e3e3",
+                        "width": "100%",
+                        "align": "right",
+                        "height": 22,
+                        "borderRadius": [4, 4, 0, 0],
+                    },
+                    "hr": {
+                        "borderColor": "#aaa",
+                        "width": "100%",
+                        "borderWidth": 0.5,
+                        "height": 0,
+                    },
+                    "b": {"fontSize": 16, "lineHeight": 33},
+                    "per": {
+                        "color": "#eee",
+                        "backgroundColor": "#334455",
+                        "padding": [2, 4],
+                        "borderRadius": 2,
+                    },
+                },
+            ),
+        )
+            .set_global_opts(legend_opts=opts.LegendOpts(pos_left="left", orient="vertical"))
+            .set_series_opts(
+            tooltip_opts=opts.TooltipOpts(
+                trigger="item", formatter="{a} <br/>{b}: {c} ({d}%)"
+            )
+        )
+        .render("templates/bikeapp/pie_bike_status.html")
+    )
+
+
+def bar_rent_duration(request):
+    conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
+    cur = conn.cursor()
+
+    sql = 'select * from customer_info'
+    cur.execute(sql.encode('utf-8'))
+    var_name = cur.description
+    name = []
+    for i in range(len(var_name)):
+        name.append(var_name[i][0])
+    datalist = []
+    var_data = cur.fetchall()
+    for i in range(len(var_data)):
+        datalist.append(var_data[i])
+    file_test = pd.DataFrame(columns=name, data=datalist)
+    file_test.to_csv("customer_info_DV.csv")
+
+    sql = 'select * from pay_info'
+    cur.execute(sql.encode('utf-8'))
+    var_name = cur.description
+    name = []
+    for i in range(len(var_name)):
+        name.append(var_name[i][0])
+    datalist = []
+    var_data = cur.fetchall()
+    for i in range(len(var_data)):
+        datalist.append(var_data[i])
+    file_test = pd.DataFrame(columns=name, data=datalist)
+    file_test.to_csv("pay_info_DV.csv")
+
+    pay_info = pd.read_csv("pay_info_DV.csv", index_col=0)
+    customer_info = pd.read_csv("customer_info_DV.csv", index_col=0)
+
+    # merge two dataframe
+    combined_info = pd.merge(pay_info, customer_info)
+    # normal customer duration
+    nh_1 = ((combined_info["duration"] <= 60) & (combined_info["usertype"] == 0)).sum()
+    nh_2 = ((combined_info["duration"] > 60) & (combined_info["duration"] <= 120) & (
+                combined_info["usertype"] == 0)).sum()
+    nh_3 = ((combined_info["duration"] > 120) & (combined_info["duration"] <= 180) & (
+                combined_info["usertype"] == 0)).sum()
+    nh_4 = ((combined_info["duration"] > 180) & (combined_info["duration"] <= 240) & (
+                combined_info["usertype"] == 0)).sum()
+    nh_5 = ((combined_info["duration"] > 240) & (combined_info["duration"] <= 300) & (
+                combined_info["usertype"] == 0)).sum()
+    nh_6 = ((combined_info["duration"] > 300) & (combined_info["duration"] <= 900) & (
+                combined_info["usertype"] == 0)).sum()
+    # prime customer duration
+    ph_1 = ((combined_info["duration"] <= 60) & (combined_info["usertype"] == 1)).sum()
+    ph_2 = ((combined_info["duration"] > 60) & (combined_info["duration"] <= 120) & (
+                combined_info["usertype"] == 1)).sum()
+    ph_3 = ((combined_info["duration"] > 120) & (combined_info["duration"] <= 180) & (
+                combined_info["usertype"] == 1)).sum()
+    ph_4 = ((combined_info["duration"] > 180) & (combined_info["duration"] <= 240) & (
+                combined_info["usertype"] == 1)).sum()
+    ph_5 = ((combined_info["duration"] > 240) & (combined_info["duration"] <= 300) & (
+                combined_info["usertype"] == 1)).sum()
+    ph_6 = ((combined_info["duration"] > 300) & (combined_info["duration"] <= 900) & (
+                combined_info["usertype"] == 1)).sum()
+
+    x_label = ("Under 1 hour", "1~2 hours", "2~3 hours", "3~4 hours", "4~5 hours", "Above 5 hours")
+
+    c = (
+        Bar()
+            .add_xaxis(x_label)
+            .add_yaxis("Normal Customer", [int(nh_1), int(nh_2), int(nh_3), int(nh_4), int(nh_5), int(nh_6)])
+            .add_yaxis("Prime Customer", [int(ph_1), int(ph_2), int(ph_3), int(ph_4), int(ph_5), int(ph_6)])
+            .set_global_opts(title_opts=opts.TitleOpts(title="Rent Duration", subtitle="Normal & Prime"))
+            .render("templates/bikeapp/bar_rent_duration.html")
+    )
+
+def liquid():
+    conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
+    cur = conn.cursor()
+
+    sql = 'select * from bike_info'
+    cur.execute(sql.encode('utf-8'))
+    var_name = cur.description
+    name = []
+    for i in range(len(var_name)):
+        name.append(var_name[i][0])
+    datalist = []
+    var_data = cur.fetchall()
+    for i in range(len(var_data)):
+        datalist.append(var_data[i])
+    file_test = pd.DataFrame(columns=name, data=datalist)
+    file_test.to_csv("bike_info_DV.csv")
+
+    bike_info = pd.read_csv("bike_info_DV.csv", index_col=0)  # input datatable
+
+    bike_usage_num = (bike_info["busage"] == 1).sum()  # count how many bike is being used
+    bike_usage_rate = bike_usage_num / 500  # usage rate
+
+    customer_info = pd.read_csv("customer_info_DV.csv", index_col=0)  # input datatable
+
+    customer_prime_num = (customer_info["usertype"] == 1).sum()
+    customer_total_num = (customer_info["usertype"] == 0).sum() + customer_prime_num
+    customer_prime_rate = customer_prime_num / customer_total_num
+
+    l1 = (
+        Liquid()
+            .add("Bike ueage Rate", [bike_usage_rate, bike_usage_num], center=["60%", "50%"])
+            .set_global_opts(title_opts=opts.TitleOpts(title="Liquid Chart"))
+    )
+
+    l2 = Liquid().add(
+        "Prime Rate",
+        [customer_prime_rate],
+        center=["25%", "50%"],
+        label_opts=opts.LabelOpts(
+            font_size=50,
+            formatter=JsCode(
+                """function (param) {
+                        return (Math.floor(param.value * 10000) / 100) + '%';
+                    }"""
+            ),
+            position="inside",
+        ),
+    )
+
+    grid = Grid().add(l1, grid_opts=opts.GridOpts()).add(l2, grid_opts=opts.GridOpts())
+    grid.render("templates/bikeapp/liquid.html")
+
+
+def heatmap_bike():
+    conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
+    cur = conn.cursor()
+
+    sql = 'select * from bike_info'
+    cur.execute(sql.encode('utf-8'))
+    var_name = cur.description
+    name = []
+    for i in range(len(var_name)):
+        name.append(var_name[i][0])
+    datalist = []
+    var_data = cur.fetchall()
+    for i in range(len(var_data)):
+        datalist.append(var_data[i])
+    file_test = pd.DataFrame(columns=name, data=datalist)
+    file_test.to_csv("bike_info_DV.csv")
+
+    # define the glasgow map
+    gla = folium.Map(location=[55.85, -4.235], zoom_start=12)
+
+    # add area A
+    area_A = [
+        [55.90, -4.26],
+        [55.90, -4.15],
+        [55.85, -4.15],
+        [55.85, -4.26]
+    ]
+    gla.add_child(folium.Polygon(
+        locations=area_A,
+        weight=3,
+        color="yellow"
+    ))
+
+    # add area B
+    area_B = [
+        [55.95, -4.31],
+        [55.88, -4.31],
+        [55.88, -4.26],
+        [55.90, -4.26],
+        [55.90, -4.155],
+        [55.95, -4.155]
+    ]
+    gla.add_child(folium.Polygon(
+        locations=area_B,
+        weight=3,
+        color="blue"
+    ))
+
+    # add area C
+    area_C = [
+        [55.95, -4.155],
+        [55.90, -4.155],
+        [55.90, -4.15],
+        [55.88, -4.15],
+        [55.88, -4.0],
+        [55.95, -4.0]
+    ]
+    gla.add_child(folium.Polygon(
+        locations=area_C,
+        weight=3,
+        color="green"
+    ))
+
+    # add area D
+    area_D = [
+        [55.88, -4.31],
+        [55.81, -4.31],
+        [55.81, -4.155],
+        [55.85, -4.155],
+        [55.85, -4.26],
+        [55.88, -4.26]
+    ]
+    gla.add_child(folium.Polygon(
+        locations=area_D,
+        weight=3,
+        color="red"
+    ))
+
+    # add area E
+    area_E = [
+        [55.85, -4.155],
+        [55.81, -4.155],
+        [55.81, -4.0],
+        [55.88, -4.0],
+        [55.88, -4.15],
+        [55.85, -4.15]
+    ]
+
+    gla.add_child(folium.Polygon(
+        locations=area_E,
+        weight=3,
+        color="orange"
+    ))
+    # get data from database
+    bike_info = pd.read_csv("bike_info_DV.csv", index_col=0)
+    x = bike_info["bGPSx"]
+    y = bike_info["bGPSy"]
+    # merge together
+    data = list(zip(x, y))
+    # print heatmap for bike
+    gla.add_child(HeatMap(data=data[5:]))
+    # save html file
+    gla.save("templates/bikeapp/heatmap-bike.html")
+
+
+def heatmap_payment():
+    conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
+    cur = conn.cursor()
+
+    sql = 'select * from pay_info'
+    cur.execute(sql.encode('utf-8'))
+    var_name = cur.description
+    name = []
+    for i in range(len(var_name)):
+        name.append(var_name[i][0])
+    datalist = []
+    var_data = cur.fetchall()
+    for i in range(len(var_data)):
+        datalist.append(var_data[i])
+    file_test = pd.DataFrame(columns=name, data=datalist)
+    file_test.to_csv("pay_info_DV.csv")
+
+    # define the glasgow map
+    gla = folium.Map(location=[55.85, -4.235], zoom_start=12)
+    # add area A
+    area_A = [
+        [55.90, -4.26],
+        [55.90, -4.15],
+        [55.85, -4.15],
+        [55.85, -4.26]
+    ]
+    gla.add_child(folium.Polygon(
+        locations=area_A,
+        weight=3,
+        color="yellow"
+    ))
+    # add area B
+    area_B = [
+        [55.95, -4.31],
+        [55.88, -4.31],
+        [55.88, -4.26],
+        [55.90, -4.26],
+        [55.90, -4.155],
+        [55.95, -4.155]
+    ]
+    gla.add_child(folium.Polygon(
+        locations=area_B,
+        weight=3,
+        color="blue"
+    ))
+    # add area C
+    area_C = [
+        [55.95, -4.155],
+        [55.90, -4.155],
+        [55.90, -4.15],
+        [55.88, -4.15],
+        [55.88, -4.0],
+        [55.95, -4.0]
+    ]
+    gla.add_child(folium.Polygon(
+        locations=area_C,
+        weight=3,
+        color="green"
+    ))
+    # add area D
+    area_D = [
+        [55.88, -4.31],
+        [55.81, -4.31],
+        [55.81, -4.155],
+        [55.85, -4.155],
+        [55.85, -4.26],
+        [55.88, -4.26]
+    ]
+    gla.add_child(folium.Polygon(
+        locations=area_D,
+        weight=3,
+        color="red"
+    ))
+    # add area E
+    area_E = [
+        [55.85, -4.155],
+        [55.81, -4.155],
+        [55.81, -4.0],
+        [55.88, -4.0],
+        [55.88, -4.15],
+        [55.85, -4.15]
+    ]
+    gla.add_child(folium.Polygon(
+        locations=area_E,
+        weight=3,
+        color="orange"
+    ))
+    # get data from database
+    pay_info = pd.read_csv("pay_info_DV.csv", index_col=0)
+    x = pay_info["startGPSx"]
+    y = pay_info["startGPSy"]
+    # merge together
+    data = list(zip(x, y))
+    # print heatmap for bike
+    gla.add_child(HeatMap(data=data[2:]))
+    # save html file
+    gla.save("templates/bikeapp/heatmap_payment.html")
+
+
+def bar_datazoom_Monthly_payment_quantity():
+    conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
+    cur = conn.cursor()
+
+    x = []
+    # Jan-Nov
+    for i in range(1, 12):
+        day1 = datetime.datetime(2020, i, 1).strftime('%Y-%m-%d %H:%M:%S')
+        day2 = datetime.datetime(2020, i + 1, 1).strftime('%Y-%m-%d %H:%M:%S')
+        cur.execute("select * from pay_info where starttime >= %s and starttime < %s", (day1, day2))
+        x.append(len(cur.fetchall()))
+    # Dec
+    day1 = datetime.datetime(2020, 12, 1).strftime('%Y-%m-%d %H:%M:%S')
+    day2 = datetime.datetime(2020, 12, 31).strftime('%Y-%m-%d %H:%M:%S')
+    cur.execute("select * from pay_info where starttime >= %s and starttime < %s", (day1, day2))
+    x.append(len(cur.fetchall()))
+    # Jan-Mar
+    for i in range(1, 3):
+        day1 = datetime.datetime(2021, i, 1).strftime('%Y-%m-%d %H:%M:%S')
+        day2 = datetime.datetime(2021, i + 1, 1).strftime('%Y-%m-%d %H:%M:%S')
+        cur.execute("select * from pay_info where starttime >= %s and starttime < %s", (day1, day2))
+        x.append(len(cur.fetchall()))
+
+    day1 = datetime.datetime(2021, 3, 1).strftime('%Y-%m-%d %H:%M:%S')
+    day2 = datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+    cur.execute("select * from pay_info where starttime >= %s and starttime < %s", (day1, day2))
+    x.append(len(cur.fetchall()))
+
+    x_label = []
+    for i in range(14):
+        x_label.append("Month" + str(i + 1))
+
+    c = (
+        Bar()
+            .add_xaxis(x_label)
+            .add_yaxis("Payment amount", x, color=Faker.rand_color())
+            .set_global_opts(
+            title_opts=opts.TitleOpts(title="Monthly payment quantity- DataZoom）"),
+            datazoom_opts=[opts.DataZoomOpts(), opts.DataZoomOpts(type_="inside")],
+        )
+        .render("templates/bikeapp/bar_datazoom_Monthly_payment_quantity.html")
+    )
 

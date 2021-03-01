@@ -48,5 +48,6 @@ urlpatterns = [
     path('repairbike/', views.repairmap),
     path('repairbike/repair', views.repair),
     #path('locationbike/', views.locationbike),
+    path('bar_rent_duration/', views.bar_rent_duration),
     ]
 urlpatterns += staticfiles_urlpatterns()
