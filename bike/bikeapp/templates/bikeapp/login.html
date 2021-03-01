@@ -53,7 +53,24 @@
                                             <!--<div class="submit">-->
 												<!--<a class="btn btn-primary btn-block" href="register.html">Register</a>-->
 												<input class="btn btn-primary btn-block" type="button" value="register"  onclick="location.href='../register'">
-											</div>
+                                            </div>
+
+                                            <div class="card-body border-top">
+                                            <!--<a class="btn btn-primary btn-google  btn-block" href="managermain.html">Manager</a>-->
+                                            <input class ="btn btn-primary btn-google btn-block" type="button" value="manager" onclick="location.href='../managermain' ">
+                                        </div><p class ="m-2"><a href="../managermain" ></a></p>
+
+
+                                    <div class="card-body border-top">
+                                            <input class ="btn btn-primary btn-facebook btn-block" type="button" value="Staff" onclick="location.href='../operatormain' ">
+                                        </div><p class ="m-2"><a href="../operatormain" </p>
+
+
+										</div>
+									</div>
+
+
+
 											<p class="mb-2"><a href="../register" >Forgot Password</a></p>
 										</form>
 										{% if has_user == 0 %}
@@ -64,11 +81,7 @@
 											<p class="form"><center>register first！</center>
 										{% endif %}
 
-										<div class="card-body border-top">
-											<a class="btn  btn-social btn-facebook btn-block"><i class="fa fa-S"></i> Staff</a>
-											<a class="btn  btn-social btn-google btn-block mt-2"><i class="fa fa-M"></i> Manager</a>
-										</div>
-									</div>
+
 
 								</div>
 								<div class="col-lg-6">

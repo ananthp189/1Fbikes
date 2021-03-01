@@ -136,7 +136,7 @@ def query(request):
         if usertype == '1':
             return render(request, 'bikeapp/operatormain.html', {'has_user': has_user, 'userName': username})
         elif usertype == '2':
-            return render(request, 'bikeapp/mangermain.html', {'has_user': has_user, 'userName': username})
+            return render(request, 'bikeapp/managermain.html', {'has_user': has_user, 'userName': username})
         else:
             return render(request, 'bikeapp/index.html', {'has_user': has_user, 'userName': username})
 
