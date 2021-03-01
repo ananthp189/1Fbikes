@@ -34,8 +34,10 @@ urlpatterns = [
     path('movebike/', views.movebike),
     path('movebike/select', views.select),
     path('locationmap/',views.locationmap),
-    path('login/return/', views.returnBike),   #Return bike using users id number
-    path('login/rent/', views.rent),          # Rent a bike using users id number
-    path('login/datavisualization/',views.dataVis),
+    path('return/', views.returnBike),   #Return bike using users id number
+    path('rent/', views.rent),          # Rent a bike using users id number
+    path('datavisualization/',views.dataVis),
+    path('pay/',views.pay),
+ 
 ]
 urlpatterns += staticfiles_urlpatterns()
