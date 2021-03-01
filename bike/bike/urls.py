@@ -38,6 +38,14 @@ urlpatterns = [
     path('rent/', views.rent),          # Rent a bike using users id number
     path('datavisualization/',views.dataVis),
     path('pay/',views.pay),
- 
-]
+    path('movebike/', views.movebike),
+    path('movebike/move', views.move),
+    path('movebike/select', views.select),
+    path('repairbike/', views.repairmap),
+    path('repairbike/repair', views.repair),
+    #path('locationbike/', views.locationbike),
+
+
+
+    ]
 urlpatterns += staticfiles_urlpatterns()
