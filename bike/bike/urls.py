@@ -23,6 +23,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^$',views.login),
+    path('query/', views.query),
     path('login/', views.login),  # Used to open the login page
     path('register/', views.register),  # Used to open the register page
     path('register/save', views.save),  # After entering the user name and password, hand it to the background save function for processing
@@ -44,8 +46,5 @@ urlpatterns = [
     path('repairbike/', views.repairmap),
     path('repairbike/repair', views.repair),
     #path('locationbike/', views.locationbike),
-
-
-
     ]
 urlpatterns += staticfiles_urlpatterns()
