@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 import pymysql
 import pymysql.cursors
+from django.contrib import messages
 import os
 from django.http import StreamingHttpResponse
 from django.conf import settings
@@ -93,6 +94,7 @@ def query(request):
     # Define global variables! ! ! ! ! ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor()
+
     # Get operation cursor
     sql = 'select ID,Password from customer_info'
     cursor.execute(sql)
@@ -121,12 +123,26 @@ def query(request):
         sql2 = sql1.format(userid)
         cursor2.execute(sql2)
         username = cursor2.fetchall()
-        cursor2.close()
-        db.close()
+        # Define global variables! ! ! ! ! ! !!!!!!!!
         global username1
         username1 = username
-        # Define global variables! ! ! ! ! ! !!!!!!!!
-        return render(request, 'bikeapp/index.html', {'has_user': has_user, 'userName': username})
+        sql3 = 'select usertype from customer_info where ID ="{}"'
+        sql4 = sql3.format(userid)
+        cursor2.execute(sql4)
+        utype = cursor2.fetchall()
+        cursor2.close()
+        db.close()
+        usertype = utype[0]["usertype"]
+        if usertype == '1':
+            return render(request, 'bikeapp/operatormain.html', {'has_user': has_user, 'userName': username})
+        elif usertype == '2':
+            return render(request, 'bikeapp/mangermain.html', {'has_user': has_user, 'userName': username})
+        else:
+            return render(request, 'bikeapp/index.html', {'has_user': has_user, 'userName': username})
+
+
+
+
 
      # return HttpResponse('login success')
     else:

@@ -30,6 +30,8 @@ urlpatterns = [
     path('register/save', views.save),  # After entering the user name and password, hand it to the background save function for processing
     path('login/query', views.query),  # After entering the user name and password, hand it to the background query function for processing
     path('mainpage/', views.main),
+    path('manager/', views.query),
+    path('operator/', views.query),
     path('defective/', views.defective),  #Open the Registration page
     path('defective/dd', views.dd),
     path('login/bikemap/', views.bikemap),
