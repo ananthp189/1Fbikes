@@ -151,7 +151,6 @@ def query(request):
 
 
 def defective(request):
-
     return render(request,'bikeapp/defective.html')
 
 def dd(request):
@@ -392,9 +391,6 @@ def select(request):
     return render(request, 'bikeapp/movebike.html',{'move_area': json.dumps(select_move_area)})
 
 
-
-
-
 #---------------Track bikes module  ----------------------#
 
 def locationmap(request):
@@ -499,10 +495,6 @@ def rent(request):
     BID = bike["bID"]
 
     return render(request, 'bikeapp/rentbike.html', {'bike_id': bikeid,'bike_pin': bikepin})
-
-
-
-
 
 #--------------- Return Bike Module  ----------------------#
 
