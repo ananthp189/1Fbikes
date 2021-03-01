@@ -20,40 +20,38 @@
 		<!--<img src="{% static 'img/logo.png' %} ">-->
 	</head>
 
-	<body class="bg-primary">
-		<div id="app">
+	<body  style="background:#FFFFFF">
+		<div id="app" style="background:#FFFFFF">
 
 			<section class="section section-2">
 				<div class="container">
-					<div class="single-page single-pageimage construction-bg cover-image " data-image-src="assets/img/news/img14.jpg">
-						<div class="wrapper wrapper2">
-							<form action="dd" method="get" class="card-body" tabindex="500">
-								<h3>Report to repair</h3>
-								<div class="mail">
-									<input type="text" name="BikeID">
-									<label>Please input Bike ID(Behind the bicycle seat)</label>
-								</div>
-
-								<div class="passwd">
-									<input type="text" name="Bikeproblem">
-									<label>Describe problem:</label>
-								</div>
+					<div class="single-page single-pageimage construction-bg cover-image " data-image-src="assets/img/news/img14.jpg" style="background:#87CEFA">
+						<div class="wrapper wrapper2" style="background:#87CEFA">
+							<!--<form action="dd" method="get" class="card-body" tabindex="500">-->
+							<h3><font color="#000000">Payment</font></h3>
+							<h5><font color="#000000">Bicycle ID: {{ bid }}</font></h5>
+							<h5><font color="#000000">Payment ID: {{ payid }}</font></h5>
+							<h5><font color="#000000">Use time: {{ time }}</font></h5>
+							<h5><font color="#000000">Bill: {{ discount_bill }}</font></h5>
+							<form action="pay" method="get" class="card-body" tabindex="500" style="background:#87CEFA">
 								<div class="submit">
-									<input class="btn btn-primary btn-block" type="submit" name="submitr" value="Report" >
+									<button style="background:#3356BB" class="btn btn-primary btn-block" type="submit" name="subtype" value="1"> payment</button>
+									<!--<input class="btn btn-primary btn-block" type="submit" name="submitr" value="Report" >-->
 								</div>
-								<p class="mb-2"><a href="../register.html" >other problem?</a></p>
+								<p class="mb-2"><a href="../register.html" ><font color="#000000">other problem?</font></a></p>
 							</form>
-							{% if has_report == 1 %}
-							<p class="form"><center><font color="#FF0000">Success!</font></center>
-							<center><font color="#FF0000">We have reported the problem to the administrator!</font></center>
+							{% if put == 1 %}
+							<p class="form"><center><font color="green">Success!</font></center>
+							<center><font color="green">The payment is successful!</font></center>
 							{% endif %}
-							{% if has_report == 0 %}
-							<p class="form"><center><font color="#FF0000">Report error！cannot find this bike!</font></center>
+							{% if put == 0 %}
+							<p class="form"><center><font color="#FF0000">Error！Please try again!</font></center>
 							{% endif %}
+
 						</div>
 					</div>
 					<div class="simple-footer mt-5 text-white">
-						Copyright &copy; psd tapp lab 17 ada 2021
+						Copyright &copy; psd tapp lab 1f ada 2021
 
 				</div>
 
