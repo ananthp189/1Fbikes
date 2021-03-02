@@ -34,7 +34,7 @@ urlpatterns = [
     path('operator/', views.query),
     path('defective/', views.defective),  #Open the Registration page
     path('defective/dd', views.dd),
-    path('login/bikemap/', views.bikemap),
+    path('bikemap/', views.bikemap),
     path('movebike/', views.movebike),
     path('movebike/select', views.select),
     path('locationmap/',views.locationmap),
@@ -48,6 +48,14 @@ urlpatterns = [
     path('repairbike/', views.repairmap),
     path('repairbike/repair', views.repair),
     #path('locationbike/', views.locationbike),
-    path('bar_rent_duration/', views.bar_rent_duration),
+    path('bar_rent_duration/', views.dv_rentbike),
+    path("bheatmap/",views.dv_heatmapbike),
+    path("pheatmap/",views.dv_heatmappay),
+    path("busage/",views.dv_bikeusage),
+    path("monthpay/", views.dv_monthpay),
+    path("ustructure/", views.dv_ustructure),
+    path("bstatus/", views.dv_bstatus),
+
+
     ]
 urlpatterns += staticfiles_urlpatterns()

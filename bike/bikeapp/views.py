@@ -581,40 +581,6 @@ def returnBike(request):
 
 
 #-------------Guangyangli------add-----------
-#show bike map-- Front and back interaction
-def bikemap(request):
-    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-    # add “pymysql.cursors.DictCursor” to pass variables to web-front
-    cursor = db.cursor(pymysql.cursors.DictCursor)
-    #search bike information to show to managers.
-    sql = 'select bID,bstatus,  barea, bpassword, busage from bike_info'
-    cursor.execute(sql)
-    all_bikes = cursor.fetchall()
-    #select gpsx and gpsy for drawing in the map
-    sqlGPS = 'select bGPSx,bGPSy from bike_info'
-    cursor.execute(sqlGPS)
-    bikesGPS = cursor.fetchall()
-    cursor.close()
-    # 关闭游标
-    db.close()
-    # 关闭数据库
-    allbikes_list = []
-    for i in range(len(all_bikes)):
-        #list() to replace dict.value to list
-        allbikes_list.append(list(all_bikes[i].values()))
-
-    print(allbikes_list)
-    bGPS = []
-    for i in range(len(bikesGPS)):
-        bGPS.append(list(bikesGPS[i].values()))
-    for i in range(len(bGPS)):
-        for j in range(2):
-            bGPS[i][j] = (bGPS[i][j])
-    print("_-_")
-    print(bGPS)
-    #
-    return render(request,'bikeapp/bike_map.html', {'bikeGPS': json.dumps(bGPS), 'bikesinfo': json.dumps(allbikes_list)})
-
 
 ###########movebike-collect data########
 def movebike(request):
@@ -943,6 +909,8 @@ def pie_User_Structure():
             .render("templates/bikeapp/pie_User_Structure.html")
     )
 
+def dv_ustructure(request):
+    return render(request,"bikeapp/pie_User_Structure.html")
 
 def pie_bike_status():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
@@ -1060,6 +1028,8 @@ def pie_bike_status():
         .render("templates/bikeapp/pie_bike_status.html")
     )
 
+def dv_bstatus(request):
+    return render(request, "bikeapp/pie_bike_status.html")
 
 def bar_rent_duration(request):
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
@@ -1132,6 +1102,15 @@ def bar_rent_duration(request):
             .render("templates/bikeapp/bar_rent_duration.html")
     )
 
+
+# rend_bike
+def dv_rentbike(request):
+    return render(request,"bikeapp/bar_rent_duration.html")
+
+
+
+
+
 def liquid():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
     cur = conn.cursor()
@@ -1183,6 +1162,12 @@ def liquid():
 
     grid = Grid().add(l1, grid_opts=opts.GridOpts()).add(l2, grid_opts=opts.GridOpts())
     grid.render("templates/bikeapp/liquid.html")
+
+def dv_bikeusage(request):
+    return render(request,"bikeapp/liquid.html")
+
+
+
 
 
 def heatmap_bike():
@@ -1289,6 +1274,10 @@ def heatmap_bike():
     # save html file
     gla.save("templates/bikeapp/heatmap-bike.html")
 
+def dv_heatmapbike(request):
+    return render(request,"bikeapp/heatmap-bike.html")
+
+
 
 def heatmap_payment():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
@@ -1388,6 +1377,10 @@ def heatmap_payment():
     # save html file
     gla.save("templates/bikeapp/heatmap_payment.html")
 
+def dv_heatmappay(request):
+    return render(request,"bikeapp/heatmap_payment.html")
+
+
 
 def bar_datazoom_Monthly_payment_quantity():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
@@ -1432,3 +1425,6 @@ def bar_datazoom_Monthly_payment_quantity():
         .render("templates/bikeapp/bar_datazoom_Monthly_payment_quantity.html")
     )
 
+
+def dv_monthpay(request):
+    return render(request,"bikeapp/bar_datazoom_Monthly_payment_quantity.html")
