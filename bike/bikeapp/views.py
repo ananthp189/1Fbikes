@@ -460,15 +460,15 @@ def returnBike(request):
     db.commit()
     cursor.execute("SELECT * FROM pay_info WHERE pID = %s",PID)
     bduration=0
+    payinfo=None
     payinfo=cursor.fetchone()
-    while payinfo is not None:
-        payinfo = cursor.fetchone()    
+    if payinfo is not None:
         bduration = (float(payinfo["endtime"])) - (float(payinfo["starttime"]))
     db.commit()
     bikeid = BID
     return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid},{'duration': bduration})  ,
 
-#-------------Guangyangli------add-----------
+#-------------movebike------------
 
 ###########movebike-collect data########
 def movebike(request):
