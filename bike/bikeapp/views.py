@@ -11,6 +11,7 @@ import folium
 from folium.plugins import HeatMap
 from pyecharts.faker import Faker
 import pandas as pd
+import random
 
 from django.shortcuts import render
 # Create your views here.
@@ -53,6 +54,13 @@ def save(request):
     password = a.get('Password')
     telephone = a.get('Telephone')
     bankcard = a.get('Bankcard')
+    ux = random.uniform(55.85, 55.90)
+    uy = random.uniform(-4.15, -4.26)
+    uxx = round(ux, 10)
+    uyy = round(uy, 10)
+    uarea = "A"
+    utype = 0
+    totaltime = 0
 
     #print(userName,passWord)
     #connect database
@@ -74,8 +82,8 @@ def save(request):
         i += 1
     if has_register == 0:
         # Insert the username and password into the database
-        sql2 = 'insert into customer_info(ID,UserName,Password,Tel,Bankcard) values(%s,%s,%s,%s,%s)'
-        cursor.execute(sql2, (userID, name, password, telephone, bankcard))
+        sql2 = 'insert into customer_info(ID,UserName,Password,renttime,usertype,uGPSx,uGPSy,uarea,Tel,Bankcard) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+        cursor.execute(sql2, (userID, name, password, totaltime, utype, uxx, uyy, uarea, telephone, bankcard))
         db.commit()
         # When you need to modify the statement in the database, add, delete, modify..., plus commit
         cursor.close()
@@ -238,7 +246,6 @@ def pay(request):
 
 #   #inupt duration, original bill, discount bill
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-    # 创建游标
     cursor = db.cursor()
     sql5 = 'UPDATE pay_info SET duration=%s, oribill=%s, discount=%s  where pID=%s'
     cursor.execute(sql5, (bduration, original_bill, discount_bill, payid))
