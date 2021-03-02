@@ -465,14 +465,14 @@ def returnBike(request):
     cursor.execute(sql1,(datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" ), user["uGPSx"], user["uGPSy"], PID))
     db.commit()
     cursor.execute("SELECT * FROM pay_info WHERE pID = %s",PID)
-    bduration=0
-    payinfo=None
-    payinfo=cursor.fetchone()
-    if payinfo is not None:
-        bduration = (float(payinfo["endtime"])) - (float(payinfo["starttime"]))
+    #bduration=0
+    #payinfo=None
+    #payinfo=cursor.fetchone()
+   #if payinfo is not None:
+    #    bduration = (float(payinfo["endtime"])) - (float(payinfo["starttime"]))
     db.commit()
     bikeid = BID
-    return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid},{'duration': bduration})  ,
+    return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid})  ,
 
 #-------------movebike------------
 
