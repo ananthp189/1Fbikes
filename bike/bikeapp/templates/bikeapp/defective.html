@@ -1,71 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="bike1f" content="width=device-width, initial-scale=1">
-		<title>Defective</title>
-		<!--Bootstrap.min css to adjust center-->
-		<!--<link rel="stylesheet" href="/bikeapp/style/css/bootstrap.min.css">-->
-		<!--Style css to color/photo/style-->
-<!--		<link rel="stylesheet" href="/bikeapp/style/css/bootstrap.min.css">-->
-	 	{% load static %}
-		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-		<!--<link rel="stylesheet" href="{% static 'css/icons.css' %}" />-->
-		<link rel="stylesheet" href="{% static 'css/sidemenu.css' %}" />
-		<link rel="stylesheet" href="{% static 'css/style.css' %}" />
-		<script src="{% static 'js/jquery.min.js' %}"></script>
-		<script src="{% static 'js/scripts.min.js' %}"></script>
-		<script src="{% static 'js/sidemenu.min.js' %}"></script>
-		<!--<img src="{% static 'img/img14.jpg' %} ">-->
-		<!--<img src="{% static 'img/logo.png' %} ">-->
-	</head>
 
-	<body class="bg-primary">
-		<div id="app">
+<head>
+	{% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-			<section class="section section-2">
-				<div class="container">
-					<div class="single-page single-pageimage construction-bg cover-image " data-image-src="assets/img/news/img14.jpg">
-						<div class="wrapper wrapper2">
-							<form action="dd" method="get" class="card-body" tabindex="500">
-								<h3>Report to repair</h3>
-								<div class="mail">
-									<input type="text" name="BikeID">
-									<label>Please input Bike ID(Behind the bicycle seat)</label>
-								</div>
+    <title>1F-Bike- Dashboard</title>
 
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+   	<link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+	<script src =  "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Welcome</sup></div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Bikes Nearby
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Rent</span>
+                </a>
+				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Return</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a class="collapse-item" href="buttons.html">Buttons</a>
+                        <a class="collapse-item" href="cards.html">Cards</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Report</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Utilities:</h6>
+                        <a class="collapse-item" href="utilities-color.html">Colors</a>
+                        <a class="collapse-item" href="utilities-border.html">Borders</a>
+                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
+                        <a class="collapse-item" href="utilities-other.html">Other</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <!--<li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Repair</span>
+                </a>-->
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Login Screens:</h6>
+                        <a class="collapse-item" href="login.html">Login</a>
+                        <a class="collapse-item" href="register.html">Register</a>
+                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">Other Pages:</h6>
+                        <a class="collapse-item" href="404.html">404 Page</a>
+                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                    </div>
+                </div>
+            </li>
+
+
+            <!-- Nav Item - Tables -->
+            <!--<li class="nav-item">
+                <a class="nav-link" href="tables.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Move Bikes</span></a>
+            </li>-->
+
+			 <!-- Nav Item - Charts -->
+            <!--<li class="nav-item">
+                <a class="nav-link" href="charts.html">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Reports</span></a>
+            </li>-->
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+            <!-- Sidebar Message -->
+            <div class="sidebar-card">
+                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="">
+                <p class="text-center mb-2"><strong>1F- Bikes</strong> is dedicated to improve the Environment and is partnered with top NGOs</p>
+                <a class="btn btn-success btn-sm" href="https://www.greenpeace.org.uk/">Donate Now!</a>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+				<div" >
+				<div class="single-page single-pageimage construction-bg cover-image " data-image-src="assets/img/news/img14.jpg" style="background:#87CEFA" >
+					<div class="wrapper wrapper2" >
+							<form action="dd" method="get" class="card-body" tabindex="500" style="background:#87CEFA">
+								<!--#87CEFA  3356BB-->
+							<h3> <font color="#000000">Report to repair</font></h3>
+							<div class="mail" >
+								<input type="text" name="BikeID">
+								<label>Please input Bike ID(Behind the bicycle seat)</label>
+							</div>
 								<div class="passwd">
-									<input type="text" name="Bikeproblem">
+								<input type="text" name="Bikeproblem">
 									<label>Describe problem:</label>
 								</div>
-								<div class="submit">
-									<input class="btn btn-primary btn-block" type="submit" name="submitr" value="Report" >
+								<div class="submit" style="background:#3356BB">
+									<input style="background:#3356BB" class="btn btn-primary btn-block" type="submit" name="submitr" value="Report" >
 								</div>
 								<p class="mb-2"><a href="../register.html" >other problem?</a></p>
 							</form>
 							{% if has_report == 1 %}
-							<p class="form"><center><font color="#FF0000">Success!</font></center>
-							<center><font color="#FF0000">We have reported the problem to the administrator!</font></center>
+							<p class="form"><center><font color="#3356BB">Success!</font></center>
+							<center><font color="#3356BB">We have reported the problem to the administrator!</font></center>
 							{% endif %}
 							{% if has_report == 0 %}
 							<p class="form"><center><font color="#FF0000">Report error！cannot find this bike!</font></center>
 							{% endif %}
-						</div>
 					</div>
-					<div class="simple-footer mt-5 text-white">
-						Copyright &copy; psd tapp lab 17 ada 2021
+			</div>
+               
 
-				</div>
+            </div>
+			
+            <!-- End of Main Content -->
 
-				</div>
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; 1F-Bikes 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
 
-			</section>
+        </div>
+        <!-- End of Content Wrapper -->
 
-		</div>
+    </div>
+    <!-- End of Page Wrapper -->
 
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+	
 
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-	</body>
-</html>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script>
+
+</body>
+
+</html>				

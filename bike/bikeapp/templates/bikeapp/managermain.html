@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-	{% load static %}
+    {% load static %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,13 +19,28 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-   	<link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}" />
-	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-	<link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
-	<script src =  "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+     <script>
+        function clickHandler(url) {
+            $("#frame-page").load(url,function(){
+                if(url == "/bikemap"){
+                    console.log("bikemap is this page",$("#map"))
+                    loadScript()
+                }
+            });
+            $.getScript()
+        }
+    </script>
 </head>
 
 <body id="page-top">
@@ -45,16 +60,6 @@
             </a>
 
             <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-<!--            &lt;!&ndash; Nav Item - Dashboard &ndash;&gt;-->
-<!--            <li class="nav-item active">-->
-<!--                <a class="nav-link" href="index.html">-->
-<!--                    <i class="fas fa-fw fa-tachometer-alt"></i>-->
-<!--                    <span>Dashboard</span></a>-->
-<!--            </li>-->
-
-            <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Heading -->
@@ -62,87 +67,59 @@
                 Data visualization
             </div>
 
-            <!-- bike map -->
-             <li class="nav-item" onclick="clickHandler(2)">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Bike map</span>
-                </a>
-             </li>
-            <li class="nav-item" onclick="clickHandler(2)">
-                <a class="nav-link collapsed" href="bar_rent_duration.html" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Rental Situation</span>
-                </a>
+            <!-- bike map <li class="nav-item" onclick="clickHandler('/managermap')">-->
+            <li class="nav-item">
+                <a class="nav-link" href="/bikemap" target="_blank">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Bike map</span></a>
             </li>
 
-            <!-- quantity of orders -->
-            <li class="nav-item" onclick="clickHandler(2)">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>quantity of orders</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
+             <!-- bar_rent_duration ~ Rental Situation-->
+            <li class="nav-item" onclick="clickHandler('/bar_rent_duration')">
+                <a class="nav-link" href="javascript:void(0);">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Rental Situation</span></a>
+            </li>
+
+            <!-- quantity of orders ~ bar_datazoom_Monthly_payment_quantity-->
+            <li class="nav-item" onclick="clickHandler('/monthpay')">
+                <a class="nav-link" href="javascript:void(0);">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>orders quantity</span></a>
             </li>
 
 
-            <!-- Rental Places -->
-            <li class="nav-item" onclick="clickHandler(3)">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Rental Places</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
+            <!-- Rental Places ~ heatmap-bike-->
+            <li class="nav-item" onclick="clickHandler('/bheatmap')">
+                <a class="nav-link" href="javascript:void(0);">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Rental Places</span></a>
             </li>
-
 
             <!-- Payment Places -->
-            <li class="nav-item" onclick="clickHandler(4)">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
+            <li class="nav-item" onclick="clickHandler('/pheatmap')">
+                <a class="nav-link" href="javascript:void(0);">
+                    <i class="fas fa-fw fa-chart-area"></i>
                     <span>Payment Places</span></a>
             </li>
 
-			 <!-- usage rate-->
-            <li class="nav-item" onclick="clickHandler(5)">
-                <a class="nav-link" href="charts.html">
+            <!-- usage rate liquid-->
+            <li class="nav-item" onclick="clickHandler('/busage')">
+                <a class="nav-link" href="javascript:void(0);">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>usage rate</span></a>
             </li>
 
-            <!-- User Scale-->
-            <li class="nav-item" onclick="clickHandler(6)">
-                <a class="nav-link" href="charts.html">
+            <!-- User Scale pie_user_structure-->
+            <li class="nav-item" onclick="clickHandler('/ustructure')">
+                <a class="nav-link" href="javascript:void(0);">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>User Scale</span></a>
             </li>
+
             <!-- Bike Status-->
-            <li class="nav-item" onclick="clickHandler(7)">
-                <a class="nav-link" href="charts.html">
+            <li class="nav-item" onclick="clickHandler('/bstatus')">
+                <a class="nav-link" href="javascript:void(0);">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Bike Status</span></a>
             </li>
@@ -159,43 +136,45 @@
                     <div class="row">
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-<!--                            <div class="card border-left-primary shadow h-100 py-2">-->
-<!--                                <div class="card-body">-->
-<!--                                    <div class="row no-gutters align-items-center">-->
-<!--                                        <div class="col mr-2">-->
-                                            <iframe src="https://www.baidu.com" ></iframe>
+                        <div style="width: 100%;height: calc(100vh - 60px);">
+                            <!--                            <div class="card border-left-primary shadow h-100 py-2">-->
+                            <!--                                <div class="card-body">-->
+                            <!--                                    <div class="row no-gutters align-items-center">-->
+                            <!--                                        <div class="col mr-2">-->
+<!--                            <iframe id="frame" src="https://www.baidu.com" width="100%" height="100%"-->
+<!--                                frameborder="0"></iframe>-->
+                            <div id="frame-page" style="height:600px;background:#F0F8FF;"></div>
 
-<!--                                        </div>-->
-<!--                                        <div class="col-auto">-->
-<!--                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-                            </div>
+                            <!--                                        </div>-->
+                            <!--                                        <div class="col-auto">-->
+                            <!--                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>-->
+                            <!--                                        </div>-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
                         </div>
-
-                </div>
-
-
-            </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; 1F-Bikes 2021</span>
                     </div>
+
                 </div>
-            </footer>
-            <!-- End of Footer -->
+
+
+            </div>
+            <!-- /.container-fluid -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white" style="display:none;">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; 1F-Bikes 2021</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
 
     </div>
     <!-- End of Page Wrapper -->
@@ -225,22 +204,26 @@
         </div>
     </div>
 
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!--    <script src="vendor/jquery/jquery.min.js"></script>-->
+<!--    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<!--    &lt;!&ndash; Core plugin JavaScript&ndash;&gt;-->
+<!--    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>-->
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+<!--    &lt;!&ndash; Custom scripts for all pages&ndash;&gt;-->
+<!--    <script src="js/sb-admin-2.min.js"></script>-->
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+<!--    <script src="vendor/chart.js/Chart.min.js"></script>-->
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+<!--    &lt;!&ndash; Page level custom scripts &ndash;&gt;-->
+<!--    <script src="js/demo/chart-area-demo.js"></script>-->
+<!--    <script src="js/demo/chart-pie-demo.js"></script>-->
+
+
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3vT3UOTtr5GYl6yqo3wLfmaiElz66hIw" async defer></script>
 
 </body>
 

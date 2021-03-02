@@ -20,26 +20,26 @@
     </style>
     <script>
           function initialize() {
-          <!--pass values from web-end-->
-          var bikeGPS = {{ bikeGPS|safe }};
-          var bikesinfo = {{bikesinfo|safe }}
+              <!--pass values from web-end-->
+              var bikeGPS = {{ bikeGPS|safe }};
+              var bikesinfo = {{bikesinfo|safe }}
 
-          <!--judge bikes' status and usage-->
-          var i;
-          for (i=0;i<bikesinfo.length;i++){
-              if (bikesinfo[i][1] == '2'){
-              bikesinfo[i][1] ='good to use'
-              } else if(bikesinfo[i][1] == '0'){
-              bikesinfo[i][1] ='broke down'
-              }else if(bikesinfo[i][1] == '1'){
-              bikesinfo[i][1] ='repairing'
-              }
+              <!--judge bikes' status and usage-->
+              var i;
+              for (i=0;i<bikesinfo.length;i++){
+                  if (bikesinfo[i][1] == '2'){
+                  bikesinfo[i][1] ='good to use'
+                  } else if(bikesinfo[i][1] == '0'){
+                  bikesinfo[i][1] ='broke down'
+                  }else if(bikesinfo[i][1] == '1'){
+                  bikesinfo[i][1] ='repairing'
+                  }
 
-              if(bikesinfo[i][4] == '0'){
-              bikesinfo[i][4] ='unoccupied'
-              }else{
-              bikesinfo[i][4] ='occupied'
-              }
+                  if(bikesinfo[i][4] == '0'){
+                  bikesinfo[i][4] ='unoccupied'
+                  }else{
+                  bikesinfo[i][4] ='occupied'
+                  }
           }
 
           <!--show the google map-->
@@ -83,12 +83,21 @@
 }
 
           <!--load the map-->
-          function loadScript() {
-            var script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&' + 'callback=initialize';
-            document.body.appendChild(script);
-          }
+<!--          function loadScript() {-->
+<!--            var script = document.createElement('script');-->
+<!--            script.type = 'text/javascript';-->
+<!--            script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&' + 'callback=initialize';-->
+<!--&lt;!&ndash;            script.src = 'callback=initialize';&ndash;&gt;-->
+<!--            document.body.appendChild(script);-->
+<!--          }-->
+
+          function loadScript()
+         {
+           var script = document.createElement("script");
+           script.type = "text/javascript";
+           script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD3vT3UOTtr5GYl6yqo3wLfmaiElz66hIw&sensor=false&callback=initialize";
+           document.body.appendChild(script);
+         }
 
           window.onload = loadScript;
         </script>
@@ -96,9 +105,7 @@
   <body>
     <div id="map"></div>
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3vT3UOTtr5GYl6yqo3wLfmaiElz66hIw&callback=initMap&libraries=&v=weekly"
-      async
-    ></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3vT3UOTtr5GYl6yqo3wLfmaiElz66hIw" async defer></script>
+
   </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>movebike</title>
 </head>
-<body>
+<hr>
 <style type="text/css">
     #select_move{
         position: absolute;
@@ -15,10 +15,84 @@
         background:white;
         display:none
     }
+    table.imagetable {
+        font-family: verdana,arial,sans-serif;
+         font-size:11px;
+         color:#333333;
+         border-width: 1px;
+         border-color: #999999;
+         border-collapse: collapse;
+     }
+    table.imagetable th {
+         background:#4B71D8;
+         border-width: 1px;
+         padding: 10px;
+         border-style: solid None solid None;
+         border-color: #999999;
+         border-collapse: collapse;
+     }
+    table.imagetable td {
+         background:#F5F5F5;
+         border-width: 1px;
+         padding: 8px;
+         border-style: solid None solid None;
+         border-color: #999999;
+         border-collapse: collapse;
+     }
+     table.littletable {
+        font-family: verdana,arial,sans-serif;
+         font-size:11px;
+         color:#333333;
+         border-width: 1px;
+         border-color: #999999;
+         border-collapse: collapse;
+     }
+    table.littletable th {
+         background:#4B71D8;
+         border-width: 3px;
+         padding: 10px;
+         border-style: solid;
+         border-color: #999999;
+     }
+    table.littletable td {
+         background:#F5F5F5;
+         border-width: 2px;
+         padding: 8px;
+         border-style: solid;
+         border-color: #999999;
+     }
 </style>
+<!------------------line and show lack--------------------------->
+<h3 align="center">{% for i in warn %}
+             <tr>
+                <td>{{i}}!</td>
+            </tr>
+        {% endfor %}
+</h3>
+<hr/>
+
+<!------------------little table--------------------------->
+<table class="littletable" align="center">
+
+        <thead>
+            <tr bgcolor="#ff7f50">
+                <th>area A</th>
+                <th>area B</th>
+                <th>area C</th>
+                <th>area D</th>
+                <th>area E</th>
+            </tr>
+        </thead>
+        <tbody align="center">
+        {% for i in count %}
+             <td>
+                {{i}}
+            </td>
+        {% endfor %}
+        </tbody>
+    </table>
 <form action="select" method="POST">
-    <table border="1" width="30%" cellpadding="0" cellspacing="0" bgcolor="#f0ffff" align="center">
-        <caption>Bike Information</caption>
+    <table class="imagetable" align="center">
         <thead>
             <tr bgcolor="#ff7f50">
 
@@ -49,68 +123,28 @@
         </tbody>
 </table>
 </form>
-<table border="1" width="30%" cellpadding="0" cellspacing="0" bgcolor="#f0ffff" align="center">
-        <caption>Bike area and amount</caption>
-        <thead>
-            <tr bgcolor="#ff7f50">
-                <th>Bike area and amount</th>
-            </tr>
-        </thead>
-        <tbody align="center">
-        {% for i in result %}
-             <tr>
-                <td>{{i}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-<p>Message!!!!!</p>
-{% for i in warn %}
-             <tr>
-                <td>{{i}}!</td>
-            </tr>
-        {% endfor %}
-<!--<button type="button" onclick="outDiv()">move bike</button>-->
-<form action="move" method="get">
-    <div id="select_move">
-        <input type="text" name="bid" placeholder="Please type a bikeID that you want to remove">
-<!--        Report error if there is no id ！-->
 
-        <span>TO</span>
-
-        <input type="text" name="barea" placeholder=" which area" id="move_area_box">
-        <!--<select>
-            <option value="A">area A</option>
-            <option value="B">area B</option>
-            <option value="C">area C</option>
-            <option value="D">area D</option>
-        </select>
-        <button>confirm</button>-->
-        <input type="submit" name="submit1" value="submit" onclick="handle()>
-        <!--<button onclick="hideDiv()">cancel</button>-->
     </div>
 
     </form>
+<!--------------------------------add alart------------------>
+{% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
 <script>
-function handle(){
-    var move_area = {{ move_area|safe }};
-    if(move_area == 'A' || move_area == 'B' || move_area == 'C'|| move_area == 'D'|| move_area == 'E')
-    {
-      alert("Succeed!");
+    function outDiv(){
+    document.getElementById("select_move").style.display="block";
     }
-    else {
-    alert("Wrong!") //After clicking OK, the cursor will return to the cursor to textbox
-    document.getElementById("move_area_box").focus();
-<!--return false-->
-}
-<!--    function outDiv(){-->
-<!--    document.getElementById("select_move").style.display="block";-->
-<!--    }-->
 
-<!--    function hideDiv(){-->
-<!--    document.getElementById("select_move").style.display="none";-->
-<!--    }-->
+    function hideDiv(){
+    document.getElementById("select_move").style.display="none";
+    }
 </script>
 
 </body>
 </html>
+
