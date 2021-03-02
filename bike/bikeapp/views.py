@@ -770,7 +770,7 @@ def repair(request):
     cursor.close()
     db.close()
     return HttpResponse('repaired--succeed')
-#-----------------location bike------------------
+#-----------------location bike------------------f
 # def locationbike(request):
 #     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
 #     # add “pymysql.cursors.DictCursor” to pass variables to web-front
@@ -905,8 +905,8 @@ def pie_User_Structure():
                 },
             ),
         )
-            .set_global_opts(title_opts=opts.TitleOpts(title="User Structure"))
-            .render("templates/bikeapp/pie_User_Structure.html")
+        .set_global_opts(title_opts=opts.TitleOpts(title="User Structure"))
+        .render("templates/bikeapp/pie_User_Structure.html")
     )
 pie_User_Structure()
 
