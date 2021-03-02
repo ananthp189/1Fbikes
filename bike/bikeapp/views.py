@@ -258,6 +258,7 @@ def pay(request):
     sql2 = sql1.format(ID)
     cursor2.execute(sql2)
     totaltime = cursor2.fetchall()
+    totaltime = totaltime[0]["renttime"]
     # totaltime = 612  # get from user function set a global various
 
     #get start time
@@ -279,10 +280,11 @@ def pay(request):
     db.close()
 
     # computed duration time
-    bduration = endtime - starttime
+    bduration = (endtime - starttime).seconds
+    bduration = bduration / 60
     # count = bduration // 100 # get the hour
     original_bill = bduration * 0.01  # 0.01 pounds a minute
-    if totaltime >= 500:
+    if int(totaltime) >= 500:
         discount_bill = original_bill * 0.8 # discount, 80% off
     else:
         discount_bill = original_bill # no discount
