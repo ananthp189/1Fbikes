@@ -408,11 +408,11 @@ def rent(request):
 
 
     print(bike)
-        
+    error=""    
 
     if bike is None or bikes is None:
-        return render(request, 'bikeapp/rentbike.html', {​​​​​​​​'error': 'no bikes available'}​​​​​​​​)
-    
+        bikeid="no bikes available"
+        return render(request, 'bikeapp/rentbike.html', {'bikeid': bikeid})        
     cursor.execute("UPDATE bike_info SET busage = 1 WHERE bID = %s", int(bike["bID"]))
     db.commit()
 
@@ -421,7 +421,8 @@ def rent(request):
     # assign bike based on user area
     # record start time
     payid = random.sample(range(10002, 91000), 1)
-    global PID=payid
+    global PID
+    PID=payid
     sql2 = "INSERT INTO pay_info (pID, ID, bID, starttime, startGPSx, startGPSy) VALUES (%s, %s, %s, %s, %s, %s)"
     cursor.execute(sql2, (payid, user["ID"], bike["bID"], time.time(), bike["bGPSx"], bike["bGPSy"]))
 
@@ -453,11 +454,12 @@ def returnBike(request):
     # return bike based on user current location
     # record end time and update the table
     sql1 = "update pay_info SET  endtime=%s, endGPSx=%s, endGPSy=%s where  pID= %s"
-    cursor.execute(sql1,(time.time(), user["uGPSx"], user["uGPSy"], int(PID))
-    payinfo=None
+    cursor.execute(sql1,(time.time(), user["uGPSx"], user["uGPSy"], int(PID)))
+    
     sql2="select * from pay_info where pid=%s"
+    payinfo=None
     cursor.execute(sql2,PID)
-    payinfo= cursor.fetchone()    
+    cursor.fetchone()    
     bduration= (float(payinfo["starttime"]))-(float(payinfo["endtime"]))
     bikeid = bike["bID"]
     db.commit()
