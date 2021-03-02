@@ -288,6 +288,7 @@ def pay(request):
     else:
         discount_bill = original_bill # no discount
 
+
 #   #inupt duration, original bill, discount bill
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor()
