@@ -915,7 +915,7 @@ def pie_User_Structure():
         .set_global_opts(title_opts=opts.TitleOpts(title="User Structure"))
         .render("templates/bikeapp/pie_User_Structure.html")
     )
-pie_User_Structure()
+
 
 def pie_bike_status():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
@@ -1032,9 +1032,9 @@ def pie_bike_status():
         )
         .render("templates/bikeapp/pie_bike_status.html")
     )
-pie_bike_status()
 
-def bar_rent_duration(request):
+
+def bar_rent_duration():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
     cur = conn.cursor()
 
@@ -1104,7 +1104,7 @@ def bar_rent_duration(request):
             .set_global_opts(title_opts=opts.TitleOpts(title="Rent Duration", subtitle="Normal & Prime"))
             .render("templates/bikeapp/bar_rent_duration.html")
     )
-bar_rent_duration()
+
 
 def liquid():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
@@ -1157,7 +1157,7 @@ def liquid():
 
     grid = Grid().add(l1, grid_opts=opts.GridOpts()).add(l2, grid_opts=opts.GridOpts())
     grid.render("templates/bikeapp/liquid.html")
-liquid()
+
 
 def heatmap_bike():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
@@ -1262,7 +1262,7 @@ def heatmap_bike():
     gla.add_child(HeatMap(data=data[5:]))
     # save html file
     gla.save("templates/bikeapp/heatmap-bike.html")
-heatmap_bike()
+
 
 def heatmap_payment():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
@@ -1361,7 +1361,7 @@ def heatmap_payment():
     gla.add_child(HeatMap(data=data[2:]))
     # save html file
     gla.save("templates/bikeapp/heatmap_payment.html")
-heatmap_payment()
+
 
 def bar_datazoom_Monthly_payment_quantity():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
@@ -1405,4 +1405,35 @@ def bar_datazoom_Monthly_payment_quantity():
         )
         .render("templates/bikeapp/bar_datazoom_Monthly_payment_quantity.html")
     )
-bar_datazoom_Monthly_payment_quantity()
+
+
+def dv_bstatus(request):
+    return render(request, "bikeapp/pie_bike_status.html")
+
+
+def dv_ustructure(request):
+    return render(request, "bikeapp/pie_User_Structure.html")
+
+
+def dv_monthpay(request):
+    return render(request, "bikeapp/bar_datazoom_Monthly_payment_quantity.html")
+
+
+def dv_bikeusage(request):
+    return render(request, "bikeapp/bar_datazoom_Monthly_payment_quantity.html")
+
+
+def dv_bikeusage(request):
+    return render(request, "bikeapp/liquid.html")
+
+
+def dv_heatmappay(request):
+    return render(request, "bikeapp/heatmap_payment.html")
+
+
+def dv_heatmapbike(request):
+    return render(request, "bikeapp/heatmap_bike.html")
+
+
+def dv_rentbike(request):
+    return render(request, "bikeapp/bar_rent_duration.html")
