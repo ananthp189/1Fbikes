@@ -427,7 +427,7 @@ def rent(request):
     # record start time
     global PID
     sql2 = "INSERT INTO pay_info (ID, bID, starttime,endtime,duration,oribill,discount,startGPSx, startGPSy,endGPSx,endGPSy,pstatus) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s)"
-    cursor.execute(sql2, ( user["ID"], bike["bID"], datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" ),datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" ),0,0,0, bike["bGPSx"], bike["bGPSy"], bike["bGPSx"], bike["bGPSy",0]))
+    cursor.execute(sql2, ( user["ID"], bike["bID"], datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" ),datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" ),0,0,0, bike["bGPSx"], bike["bGPSy"], bike["bGPSx"], bike["bGPSy"],0))
     PID=cursor.lastrowid
     db.commit()
     bikeid = bike["bID"]
