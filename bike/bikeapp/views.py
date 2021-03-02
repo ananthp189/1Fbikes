@@ -472,7 +472,7 @@ def returnBike(request):
     #    bduration = (float(payinfo["endtime"])) - (float(payinfo["starttime"]))
     db.commit()
     bikeid = BID
-    return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid})  ,
+    return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid})
 
 #-------------movebike------------
 
