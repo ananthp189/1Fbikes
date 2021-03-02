@@ -373,67 +373,6 @@ def locationmap(request):
 
 #--------------- Rent Bike Module  ----------------------#
 
-def rent(request):
-
-    #Setup database connection
-    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-    cursor = db.cursor(pymysql.cursors.DictCursor)
-
-    #Get user from global id
-    cursor.execute("SELECT * FROM customer_info WHERE ID = %s", ID)
-    user = cursor.fetchone()
-
-    # fetch all bikes
-    # calculate all the distances between user and bikes
-    # choose the bike with the minimum distance
-
-    cursor.execute("SELECT * FROM bike_info WHERE busage = 0 AND bstatus = 0")
-
-    bikes = cursor.fetchall()
-    mindistance = None
-    bike = None
-
-    # for every bike calculate the distance between user and bike
-    # if the minimum distance is none or less than distance
-    # set the mindistance to distance
-    # set bike to availablebike
-
-    for availableBike in bikes:
-        distancex = pow((float(user["uGPSx"])-float(availableBike["bGPSx"])),2)
-        distancey = pow((float(user["uGPSy"]) - float(availableBike["bGPSy"])), 2)
-        distance = math.sqrt(distancex + distancey)
-        if not isinstance(mindistance, float) or distance < mindistance:
-            mindistance = distance
-            bike = availableBike
-
-
-    print(bike)
-    error=""    
-
-    if bike is None or bikes is None:
-        bikeid="no bikes available"
-        return render(request, 'bikeapp/rentbike.html', {'bikeid': bikeid})        
-    cursor.execute("UPDATE bike_info SET busage = 1 WHERE bID = %s", int(bike["bID"]))
-    db.commit()
-
-
-    # with global id get user
-    # assign bike based on user area
-    # record start time
-    payid = random.sample(range(10002, 91000), 1)
-    global PID
-    PID=payid
-    sql2 = "INSERT INTO pay_info (pID, ID, bID, starttime, startGPSx, startGPSy) VALUES (%s, %s, %s, %s, %s, %s)"
-    cursor.execute(sql2, (payid, user["ID"], bike["bID"], time.time(), bike["bGPSx"], bike["bGPSy"]))
-
-    bikeid = bike["bID"]
-    bikepin = bike["bpassword"]
-
-    global BID
-    BID = bike["bID"]
-
-    return render(request, 'bikeapp/rentbike.html', {'bike_id': bikeid,'bike_pin': bikepin})
-
 #--------------- Return Bike Module  ----------------------#
 
 #return a bike function
@@ -449,21 +388,27 @@ def returnBike(request):
     #Get user from global id
     cursor.execute("SELECT * FROM customer_info WHERE ID = %s", ID)
     user = cursor.fetchone()
-    # set the fetched bike to returned status
-    cursor.execute("UPDATE bike_info SET busage = 0 WHERE bID = %s", int(BID))
+    #Get bikeinfo from glbal PID
+    cursor.execute("SELECT * FROM bike_info WHERE bID = %s", int(BID))
+    bike = cursor.fetchone()
+
+    # set the fetched bike to returned status and update its new gps
+    cursor.execute("UPDATE bike_info SET busage = 0 , bGPSx=%s , bGPSy=%s WHERE bID = %s",(user["uGPSx"], user["uGPSy"], int(BID)))
     db.commit()
     # return bike based on user current location
     # record end time and update the table
     sql1 = "update pay_info SET  endtime=%s, endGPSx=%s, endGPSy=%s where  pID= %s"
     cursor.execute(sql1,(time.time(), user["uGPSx"], user["uGPSy"], PID))
-    
-    sql2="select * from pay_info where pid=%s"
-    cursor.execute(sql2,PID)
-    payinfo=cursor.fetchone()    
-    bduration= (float(payinfo["starttime"]))-(float(payinfo["endtime"]))
     db.commit()
+    cursor.execute("SELECT * FROM pay_info WHERE pID = %s",PID)
+    bduration=0
+    payinfo=cursor.fetchone()
+    while payinfo is not None:
+        payinfo = cursor.fetchone()    
+        bduration = (float(payinfo["endtime"])) - (float(payinfo["starttime"]))
+    db.commit()
+    bikeid = BID
     return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid},{'duration': bduration})  ,
-
 
 #-------------Guangyangli------add-----------
 
