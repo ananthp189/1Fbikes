@@ -194,8 +194,15 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                  Current Trip Duration</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><p id="timer"></p> </div>
+                                                  Your current Trip</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+												<div id="stopwatch">
+												  <!-- CURRENT TIME -->
+												  <div id="sw-time">00:00:00</div>												 
+												  <!-- CONTROLS -->
+												  <input type="button" value="Stop" id="sw-rst" disabled/>
+												</div>
+											</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -294,33 +301,35 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
-	<script> 
-	var countupDate = localStorage.getItem('startDate'); 
-	if (countupDate) { 
-    countupDate = new Date(countupDate); 
-	} else { 
-		countupDate = new Date(); 
-		localStorage.setItem('startDate', countupDate); 
-	} 
-	// Update the count up every 1 second 
-	var x = setInterval(function() { 
-	 
-		// Get todays date and time 
-		var now = new Date().getTime(); 
-	 
-		// Find the distance between now an the count down date 
-		var timediff = now - countupDate.getTime(); 
-	 
-		// Conversions calculations for days, hours, minutes and seconds 
-		var days = Math.floor(timediff / (1000 * 60 * 60 * 24)); 
-		var hrs = Math.floor((timediff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
-		var min = Math.floor((timediff % (1000 * 60 * 60)) / (1000 * 60)); 
-		var sec = Math.floor((timediff % (1000 * 60)) / 1000); 
-	 
-		//display result in an element with id="timer" 
-		document.getElementById("timer").innerHTML = days + "d " + hrs + "h " + min + "m " + sec + "s "; 
-	}, 1000); 
-	</script> 
+	<html xmlns="http://www.w3.org/1999/xhtml" >
+
+    <script type="text/javascript">
+        var check = null;
+
+        function printDuration() {
+            if (check == null) {
+                var cnt = 0;
+
+                check = setInterval(function () {
+                    cnt += 1;
+                    document.getElementById("timer").innerHTML = cnt;
+                }, 1000);
+            }
+        }
+
+        function stop() {
+            clearInterval(check);
+            check = null;
+            document.getElementById("timer").innerHTML = '0';
+        }
+    </script>
+</head>
+<body>
+<div>
+    
+</div>
+</body>
+</html>
 
 
 </body>
