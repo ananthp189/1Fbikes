@@ -17,8 +17,9 @@
         margin: 0;
         padding: 0;
       }
-
-              function initialize() {
+    </style>
+    <script>
+          function initialize() {
           <!--pass values from web-end-->
           var bikeGPS = {{ bikeGPS|safe }};
           var bikesinfo = {{bikesinfo|safe }}
@@ -26,12 +27,10 @@
           <!--judge bikes' status and usage-->
           var i;
           for (i=0;i<bikesinfo.length;i++){
-              if (bikesinfo[i][1] == '2'){
+              if (bikesinfo[i][1] == '0'){
               bikesinfo[i][1] ='good to use'
-              } else if(bikesinfo[i][1] == '0'){
+              } else if(bikesinfo[i][1] == '1'){
               bikesinfo[i][1] ='broke down'
-              }else if(bikesinfo[i][1] == '1'){
-              bikesinfo[i][1] ='repairing'
               }
 
               if(bikesinfo[i][4] == '0'){
@@ -86,21 +85,6 @@
                  );
                  }
 
-               else if(bikesinfo[i][1] == 'repairing'){
-                   marker2 = new google.maps.Marker({
-                position: new google.maps.LatLng(bikeGPS[i][0], bikeGPS[i][1]),
-                map: map,
-                icon: {
-                   url: "http://maps.google.com/mapfiles/ms/micons/flag.png"}
-              });
-                content_title = ['bike ID: ', 'bike status: ', 'bike area: ', 'bike password: ', 'bike usage: ']
-                 bindInfoWindow(marker2, map, infowindow, "<p>" + content_title[0] + bikesinfo[i][0] + "</p>"
-                         + "<p>" + content_title[1] + bikesinfo[i][1] + "</p>"
-                         + "<p>" + content_title[2] + bikesinfo[i][2] + "</p>"
-                         + "<p>" + content_title[3] + bikesinfo[i][3] + "</p>"
-                         + "<p>" + content_title[4] + bikesinfo[i][4] + "</p>"
-                 );
-                 }
 
                else{
                    marker3 = new google.maps.Marker({
@@ -201,8 +185,7 @@ else tb.style.display='none';
     ></script>
   </body>
 </html>
-</style>
-    <script>
+
 
 
 
