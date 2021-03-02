@@ -142,14 +142,12 @@ def query(request):
         cursor2.close()
         db.close()
         usertype = utype[0]["usertype"]
-        if usertype == '1':
+        if usertype == '1': #operators
             return render(request, 'bikeapp/operatormain.html', {'has_user': has_user, 'userName': username})
-        elif usertype == '2':
+        elif usertype == '2':#managers
             return render(request, 'bikeapp/managermain.html', {'has_user': has_user, 'userName': username})
         else:
             return render(request, 'bikeapp/index.html', {'has_user': has_user, 'userName': username})
-
-
 
 
 
@@ -341,6 +339,41 @@ def bikemap(request):
         #list() to replace dict.value to list
         allbikes_list.append(list(all_bikes[i].values()))
 
+    # print(allbikes_list)
+    bGPS = []
+    for i in range(len(bikesGPS)):
+        bGPS.append(list(bikesGPS[i].values()))
+    for i in range(len(bGPS)):
+        for j in range(2):
+            bGPS[i][j] = (bGPS[i][j])
+    # print("_-_")
+    # print(bGPS)
+    #
+    return render(request,'bikeapp/bike_map.html', {'bikeGPS': json.dumps(bGPS), 'bikesinfo': json.dumps(allbikes_list)})
+
+
+def managermap(request):
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    # add “pymysql.cursors.DictCursor” to pass variables to web-front
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    #search bike information to show to managers.
+    sql = 'select bID,bstatus,  barea, bpassword, busage from bike_info'
+    cursor.execute(sql)
+    all_bikes = cursor.fetchall()
+    #select gpsx and gpsy for drawing in the map
+    sqlGPS = 'select bGPSx,bGPSy from bike_info'
+    cursor.execute(sqlGPS)
+    bikesGPS = cursor.fetchall()
+    #close cursor
+    cursor.close()
+    # close database
+    db.close()
+
+    allbikes_list = []
+    for i in range(len(all_bikes)):
+        #list() to replace dict.value to list
+        allbikes_list.append(list(all_bikes[i].values()))
+
     print(allbikes_list)
     bGPS = []
     for i in range(len(bikesGPS)):
@@ -350,9 +383,7 @@ def bikemap(request):
             bGPS[i][j] = (bGPS[i][j])
     print("_-_")
     print(bGPS)
-    #
-    return render(request,'bikeapp/bike_map.html', {'bikeGPS': json.dumps(bGPS), 'bikesinfo': json.dumps(allbikes_list)})
-
+    return render(request,'bikeapp/managermain.html', {'bikeGPS': json.dumps(bGPS), 'bikesinfo': json.dumps(allbikes_list)})
 
 #---------------Track bikes module  ----------------------#
 
@@ -970,7 +1001,7 @@ def pie_bike_status():
 def dv_bstatus(request):
     return render(request, "bikeapp/pie_bike_status.html")
 
-def bar_rent_duration(request):
+def bar_rent_duration():
     conn = pymysql.connect(user='root', password='123123', host='127.0.0.1', database='bikerental')
     cur = conn.cursor()
 
@@ -1045,8 +1076,6 @@ def bar_rent_duration(request):
 # rend_bike
 def dv_rentbike(request):
     return render(request,"bikeapp/bar_rent_duration.html")
-
-
 
 
 

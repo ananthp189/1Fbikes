@@ -35,7 +35,8 @@ urlpatterns = [
     path('defective/', views.defective),  #Open the Registration page
     path('defective/dd', views.dd),
     path('bikemap/', views.bikemap),
-    path('movebike/', views.movebike),
+    path('managermap/', views.managermap),
+    path('movebike/', views.movebike, views.managermap),
     path('movebike/select', views.select),
     path('locationmap/',views.locationmap),
     path('return/', views.returnBike),   #Return bike using users id number
@@ -45,7 +46,7 @@ urlpatterns = [
     path('repairbike/', views.repairmap),
     path('repairbike/repair', views.repair),
     #path('locationbike/', views.locationbike),
-    path('bar_rent_duration/', views.bar_rent_duration),
+    path('bar_rent_duration/', views.dv_rentbike),
     path("bheatmap/",views.dv_heatmapbike),
     path("pheatmap/",views.dv_heatmappay),
     path("busage/",views.dv_bikeusage),
