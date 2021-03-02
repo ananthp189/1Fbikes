@@ -469,7 +469,8 @@ def returnBike(request):
     # Setup database connection
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor(pymysql.cursors.DictCursor)
-
+    ID=999
+    BID=101
     # Get user and bike details from global id
     cursor.execute("SELECT * FROM customer_info WHERE ID = %s", int(ID))
     user = cursor.fetchone()
@@ -483,14 +484,36 @@ def returnBike(request):
     db.commit()
     # return bike based on user current location
     # record end time and update the table
-    sql2 = "update pay_info ( endtime, endGPSx, endGPSy) VALUES ( %s, %s, %s) where  id= %s and bID= %s"
+    sql1 = "update pay_info ( endtime, endGPSx, endGPSy) VALUES ( %s, %s, %s) where  ID= %s and bID= %s"
     cursor.execute(sql2, time.time(), user["uGPSx"], user["uGPSy"], int(ID), int(BID))
-
+    global PID 
+    PID = cursor.lastrowid()
+    
+    #pay() logic starts
     # assign charge and discount
-    pay()
+    sql1 = 'select starttime from pay_info where pID ="{}"'
+    sql2 = sql1.format(PID)
+    cursor5.execute(sql2)
+    startt = cursor5.fetchall()
+    starttime = datetime.datetime.strptime(startt[0]["starttime"], "%Y-%m-%d %H:%M:%S")
+    #get end time
+    sql3 = 'select endtime from pay_info where pID ="{}"'
+    sql4 = sql3.format(PID)
+    cursor5.execute(sql4)
+    endt = cursor5.fetchall()
+    # print("!!!!!", endt)
+    endtime = datetime.datetime.strptime(endt[0]["endtime"], "%Y-%m-%d %H:%M:%S")
+    print("!!!!!", endtime)
+    cursor5.close()
+    db.close()
+
+    # computed duration time
+    bduration = (endtime - starttime).seconds
+    bduration = bduration / 60
+    #pay() logic ends
 
     bikeid = bike["bID"]
-    return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid})  ,
+    return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid},{'duration': bduration})  ,
 
 
 
