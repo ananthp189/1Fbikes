@@ -411,7 +411,8 @@ def rent(request):
         
 
     if bike is None or bikes is None:
-    return render(request, 'bikeapp/rentbike.html', {​​​​​​​​'error': 'no bikes available'}​​​​​​​​)
+        return render(request, 'bikeapp/rentbike.html', {​​​​​​​​'error': 'no bikes available'}​​​​​​​​)
+    
     cursor.execute("UPDATE bike_info SET busage = 1 WHERE bID = %s", int(bike["bID"]))
     db.commit()
 
