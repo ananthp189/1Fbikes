@@ -41,7 +41,8 @@ urlpatterns = [
     path('return/', views.returnBike),   #Return bike using users id number
     path('rent/', views.rent),          # Rent a bike using users id number
     path('datavisualization/',views.dataVis),
-    path('pay/',views.pay),
+    path('payment/', views.payment),
+    path('payment/pay', views.pay),
     path('repairbike/', views.repairmap),
     path('repairbike/repair', views.repair),
     #path('locationbike/', views.locationbike),
