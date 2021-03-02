@@ -421,8 +421,8 @@ def rent(request):
     # record start time
     global PID
     PID = random.sample(range(10002, 91000), 1) 
-    sql2 = "INSERT INTO pay_info (pID, ID, bID, starttime, startGPSx, startGPSy) VALUES (%s, %s, %s, %s, %s, %s)"
-    cursor.execute(sql2, (PID, user["ID"], bike["bID"], time.time(), bike["bGPSx"], bike["bGPSy"]))
+    sql2 = "INSERT INTO pay_info (pID, ID, bID, starttime,endtime,duration,oribill,discount,startGPSx, startGPSy,endGPSx,endGPSy,pstatus) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s)"
+    cursor.execute(sql2, (PID, user["ID"], bike["bID"], time.time(),time.time(),0,0,0, bike["bGPSx"], bike["bGPSy"], bike["bGPSx"], bike["bGPSy",0]))
     db.commit()
     bikeid = bike["bID"]
     bikepin = bike["bpassword"]
