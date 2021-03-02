@@ -189,7 +189,7 @@ def dd(request):
         i += 1
     if has_report == 1:
         usage = 0  # set bike_usage = 0 (don't use)
-        status = 2  # set bike status = 2 (1 good, 2 broken)
+        status = 1  # set bike status = 1 (0 good, 1 broken)
         db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
         cursor = db.cursor()
         sql = 'UPDATE bike_info SET bproblem=%s, busage=%s, bstatus=%s where bID=%s'
