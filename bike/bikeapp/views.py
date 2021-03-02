@@ -527,7 +527,7 @@ def returnBike(request):
     cursor.execute("SELECT * FROM customer_info WHERE ID = %s", int(ID))
     user = cursor.fetchone()
 
-    cursor.execute("SELECT * FROM bike_info WHERE ID = %s", int(BID))
+    cursor.execute("SELECT * FROM bike_info WHERE bID = %s", int(BID))
     bike = cursor.fetchone()
 
     # set the fetched bike to returned status
@@ -536,14 +536,38 @@ def returnBike(request):
     db.commit()
     # return bike based on user current location
     # record end time and update the table
-    sql2 = "update pay_info ( endtime, endGPSx, endGPSy) VALUES ( %s, %s, %s) where  id= %s and bID= %s"
-    cursor.execute(sql2, time.time(), user["uGPSx"], user["uGPSy"], int(ID), int(BID))
-
+    sql1 = "update pay_info SET  endtime=%s, endGPSx=%s, endGPSy=%s where  ID= %s and bID= %s"
+    cursor.execute(sql1,(time.time(), user["uGPSx"], user["uGPSy"], int(ID), int(BID)))
+    global PID 
+    PID = cursor.lastrowid
+    
+    #pay() logic starts
+    status = 0
     # assign charge and discount
-    pay()
+    totaltime = 612  # get from user function set a global various
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    sql1 = 'select starttime from pay_info where pID ="{}"'
+    sql2 = sql1.format(PID)
+    cursor.execute(sql2)
+    startt = cursor.fetchall()
+    starttime = datetime.datetime.strptime(startt[0]["starttime"], "%Y-%m-%d %H:%M:%S")
+    #get end time
+    sql3 = 'select endtime from pay_info where pID ="{}"'
+    sql4 = sql3.format(PID)
+    cursor.execute(sql4)
+    endt = cursor.fetchall()
+    # print("!!!!!", endt)
+    endtime = datetime.datetime.strptime(endt[0]["endtime"], "%Y-%m-%d %H:%M:%S")
+    print("!!!!!", endtime)
+    cursor.close()
+    
+    # computed duration time
+    bduration = (endtime - starttime).seconds
+    bduration = bduration / 60
+    #pay() logic ends
 
     bikeid = bike["bID"]
-    return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid})  ,
+    return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid},{'duration': bduration})  ,
 
 
 
