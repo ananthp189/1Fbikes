@@ -3,6 +3,15 @@
 import os
 import sys
 import pymysql
+
+
+par_dir = os.path.dirname(os.path.abspath(__file__)) + '/bikeapp'
+os.chdir(par_dir)
+sys.path.append(par_dir)
+
+from views import pie_bike_status, pie_User_Structure, bar_datazoom_Monthly_payment_quantity, liquid, \
+    heatmap_payment, heatmap_bike, bar_rent_duration
+
 pymysql.install_as_MySQLdb()
 
 def main():
@@ -20,4 +29,11 @@ def main():
 
 
 if __name__ == '__main__':
+    pie_bike_status()
+    pie_User_Structure()
+    bar_datazoom_Monthly_payment_quantity()
+    liquid()
+    heatmap_payment()
+    heatmap_bike()
+    bar_rent_duration()
     main()

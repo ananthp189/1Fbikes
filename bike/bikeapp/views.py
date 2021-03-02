@@ -1109,7 +1109,7 @@ def heatmap_bike():
     # print heatmap for bike
     gla.add_child(HeatMap(data=data[5:]))
     # save html file
-    gla.save("templates/bikeapp/heatmap-bike.html")
+    gla.save("templates/bikeapp/heatmap_bike.html")
 
 
 def heatmap_payment():
@@ -1256,32 +1256,36 @@ def bar_datazoom_Monthly_payment_quantity():
 
 
 def dv_bstatus(request):
+    # pie_bike_status()
     return render(request, "bikeapp/pie_bike_status.html")
 
 
 def dv_ustructure(request):
+    # pie_User_Structure()
     return render(request, "bikeapp/pie_User_Structure.html")
 
 
 def dv_monthpay(request):
+    # bar_datazoom_Monthly_payment_quantity()
     return render(request, "bikeapp/bar_datazoom_Monthly_payment_quantity.html")
 
 
 def dv_bikeusage(request):
-    return render(request, "bikeapp/bar_datazoom_Monthly_payment_quantity.html")
-
-
-def dv_bikeusage(request):
+    # liquid()
     return render(request, "bikeapp/liquid.html")
 
 
 def dv_heatmappay(request):
+    # heatmap_payment()
     return render(request, "bikeapp/heatmap_payment.html")
 
 
 def dv_heatmapbike(request):
+    # heatmap_bike()
     return render(request, "bikeapp/heatmap_bike.html")
 
 
 def dv_rentbike(request):
+    # bar_rent_duration()
     return render(request, "bikeapp/bar_rent_duration.html")
+
