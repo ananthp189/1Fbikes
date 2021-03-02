@@ -445,8 +445,9 @@ def returnBike(request):
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor = db.cursor(pymysql.cursors.DictCursor)
 
-    # Get user and bike details from global id
-    cursor.execute("SELECT * FROM customer_info WHERE ID = %s", int(ID))
+
+    #Get user from global id
+    cursor.execute("SELECT * FROM customer_info WHERE ID = %s", ID)
     user = cursor.fetchone()
     # set the fetched bike to returned status
     cursor.execute("UPDATE bike_info SET busage = 0 WHERE bID = %s", int(BID))
@@ -454,14 +455,12 @@ def returnBike(request):
     # return bike based on user current location
     # record end time and update the table
     sql1 = "update pay_info SET  endtime=%s, endGPSx=%s, endGPSy=%s where  pID= %s"
-    cursor.execute(sql1,(time.time(), user["uGPSx"], user["uGPSy"], int(PID)))
+    cursor.execute(sql1,(time.time(), user["uGPSx"], user["uGPSy"], PID))
     
     sql2="select * from pay_info where pid=%s"
-    payinfo=None
     cursor.execute(sql2,PID)
-    cursor.fetchone()    
+    payinfo=cursor.fetchone()    
     bduration= (float(payinfo["starttime"]))-(float(payinfo["endtime"]))
-    bikeid = bike["bID"]
     db.commit()
     return render(request, 'bikeapp/returnbike.html',{'bike_id': bikeid},{'duration': bduration})  ,
 
