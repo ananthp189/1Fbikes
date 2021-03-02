@@ -204,7 +204,44 @@ def dd(request):
 
 # payment
 def payment(request):
-    return render(request,'bikeapp/pay.html')
+    # creat paymentid
+    bID = BID  # get from rentbike function set a global various
+    # payid = random.sample(range(10002,91000),1)
+    payid = PID  # get from rentbike function set a global various
+    # set payment status
+    status = 0
+    # duration
+    totaltime = 612  # get from user function set a global various
+    # get start time
+    db = pymysql.connect(host='localhost', user='root', password='19990124', database='bikerental')
+    cursor5 = db.cursor(pymysql.cursors.DictCursor)
+    sql1 = 'select starttime from pay_info where pID ="{}"'
+    sql2 = sql1.format(payid)
+    cursor5.execute(sql2)
+    startt = cursor5.fetchall()
+    starttime = datetime.datetime.strptime(startt[0]["starttime"], "%Y-%m-%d %H:%M:%S")
+    # get end time
+    sql3 = 'select endtime from pay_info where pID ="{}"'
+    sql4 = sql3.format(payid)
+    cursor5.execute(sql4)
+    endt = cursor5.fetchall()
+    # print("!!!!!", endt)
+    endtime = datetime.datetime.strptime(endt[0]["endtime"], "%Y-%m-%d %H:%M:%S")
+    print("!!!!!", endtime)
+    cursor5.close()
+    db.close()
+
+    # computed duration time
+    bduration = (endtime - starttime).seconds
+    bduration = bduration / 60
+    # count = bduration // 100 # get the hour
+    original_bill = bduration * 0.01  # 0.01 pounds a minute
+    if totaltime >= 500:
+        discount_bill = original_bill * 0.8  # discount, 80% off
+    else:
+        discount_bill = original_bill  # no discount
+
+    return render(request,'bikeapp/pay.html', {'bid':bID, 'payid': payid, 'time': bduration, 'original_bill': original_bill, 'discount_bill': discount_bill})
 
 
 def pay(request):
