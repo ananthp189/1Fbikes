@@ -527,17 +527,23 @@ def movebike(request):
     sql = 'select bID, bstatus, bGPSx,bGPSy, barea, busage from bike_info'
     cursor.execute(sql)
     all_bikes = cursor.fetchall()
-    # All query results are returned
+    # 查询结果全部返回
     ###################li------add-----------
     area_list = []
     for a in all_bikes:
         area_list.append(a['barea'])
+    a=area_list.count("A")
+    b=area_list.count("B")
+    c=area_list.count("C")
+    d=area_list.count("D")
+    e=area_list.count("E")
+    count_list=[a,b,c,d,e]
+    print(count_list)
     result = dict()
     for b in set(area_list):
         result[b] = area_list.count(b)
     print(result.items())
-    #Setting the sufficient number of bikes in each area to be 80
-    # the area with insufficient vehicles is displayed
+    #假设每个区域标准80辆车，显示车辆不足区域
     normal = 80;
     warn_list = []
     for i in result.items():
@@ -545,20 +551,17 @@ def movebike(request):
             y = "area " + i[0] + " needs more bikes!!!!"
             print(y)
             warn_list.append(y)
-        else:
-            x = "area " + i[0] + " is good"
-            print(x)
-            warn_list.append(x)
+    if len(warn_list)==0:
+        k = "Every area is good"
+        warn_list.append(k)
     #print(warn_list)
     ######################
-    #Close the cursor
     cursor.close()
-    # Close Database
+    # 关闭游标
     db.close()
-
+    # 关闭数据库
     # print(all_bikes)
-    return render(request, 'bikeapp/movebike.html',{'allbikes': all_bikes, 'result': result.items(),'warn':warn_list})
-
+    return render(request, 'bikeapp/movebike.html',{'allbikes': all_bikes, 'result': result.items(),'warn':warn_list,'count':count_list})
 
 #---------------movebike_action--------#
 def move(request):
