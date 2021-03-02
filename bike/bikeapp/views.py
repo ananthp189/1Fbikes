@@ -569,50 +569,7 @@ def movebike(request):
     return render(request, 'bikeapp/movebike.html',{'allbikes': all_bikes, 'result': result.items(),'warn':warn_list,'count':count_list})
 
 
-#---------------movebike_action--------#
-def move(request):
-    a = request.GET
-    move_bid = a.get('bid')
-    move_area = a.get('barea')
-    global gpsx, gpsy
-    if move_area == 'A':
-        gpsx = random.uniform(55.85,55.90)
-        gpsy = random.uniform(-4.15,-4.26)
-    elif move_area == 'B':
-        print("aaaaaaaaaa")
-        gpsx = random.uniform(55.90,55.95)
-        gpsy = random.uniform(-4.26,-4.31)
-    elif move_area == 'C':
-        gpsx = random.uniform(55.90,55.95)
-        gpsy = random.uniform(-4.0,-4.15)
-    elif move_area == 'D':
-        gpsx = random.uniform(55.81,55.85)
-        gpsy = random.uniform(-4.26,-4.31)
-    elif move_area == 'E':
-        gpsx = random.uniform(55.81,55.85)
-        gpsy = random.uniform(-4.0,-4.15)
-    gpsx = str(gpsx)
-    gpsy = str(gpsy)
-    print(gpsx)
-    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-    cursor = db.cursor()
-    sql = 'update bike_info set barea=%s where bID=%s'
-    cursor.execute(sql, (move_area, move_bid))
-    db.commit()
-    cursor.close()
-    db.close()
 
-    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-    cursor = db.cursor()
-    sql2 = 'update bike_info set bGPSx=%s,bGPSy=%s where bID=%s'
-    cursor.execute(sql2, (gpsx, gpsy, move_bid))
-    db.commit()
-    cursor.close()
-    db.close()
-    return HttpResponse('succeed')
-
-
-#----------------select-------------------
 #----------------select-------------------
 def select(request):
     a = request.POST
