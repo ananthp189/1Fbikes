@@ -213,7 +213,7 @@ def payment(request):
     # duration
     totaltime = 612  # get from user function set a global various
     # get start time
-    db = pymysql.connect(host='localhost', user='root', password='19990124', database='bikerental')
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor5 = db.cursor(pymysql.cursors.DictCursor)
     sql1 = 'select starttime from pay_info where pID ="{}"'
     sql2 = sql1.format(payid)
@@ -258,6 +258,7 @@ def pay(request):
     sql2 = sql1.format(ID)
     cursor2.execute(sql2)
     totaltime = cursor2.fetchall()
+    totaltime = totaltime[0]["renttime"]
     # totaltime = 612  # get from user function set a global various
 
     #get start time
@@ -282,7 +283,7 @@ def pay(request):
     bduration = endtime - starttime
     # count = bduration // 100 # get the hour
     original_bill = bduration * 0.01  # 0.01 pounds a minute
-    if totaltime >= 500:
+    if int(totaltime) >= 500:
         discount_bill = original_bill * 0.8 # discount, 80% off
     else:
         discount_bill = original_bill # no discount
