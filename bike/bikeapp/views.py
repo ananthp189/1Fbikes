@@ -300,11 +300,11 @@ def pay(request):
     #<button class="" type="submit" name="subtype" value="1"> payment</button> in html
     p = request.GET
     submit1 = p.get('subtype')
-    if submit1 == 1:
-        put = 1 # return various
-        status = 1  # pay successful
-        buse = 0  # in bike chart
-        totaltime = totaltime + bduration
+
+    put = 1 # return various
+    status = 1  # pay successful
+    buse = 0  # in bike chart
+    totaltime = totaltime + bduration
     # database
 
     #update payment status
