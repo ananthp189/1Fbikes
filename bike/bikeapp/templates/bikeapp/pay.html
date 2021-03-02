@@ -169,8 +169,9 @@
 							<h3><font color="#000000">Payment</font></h3>
 							<h5><font color="#000000">Bicycle ID: {{ bid }}</font></h5>
 							<h5><font color="#000000">Payment ID: {{ payid }}</font></h5>
-							<h5><font color="#000000">Use time: {{ time }}</font></h5>
-							<h5><font color="#000000">Bill: {{ discount_bill }}</font></h5>
+							<h5><font color="#000000">Use time: {{ time }} minutes</font></h5>
+                            <h5><font color="#000000">original_Bill: {{ original_bill }}</font></h5>
+							<h5><font color="#000000">discount_Bill: {{ discount_bill }}</font></h5>
 							<form action="pay" method="get" class="card-body" tabindex="500" style="background:#87CEFA">
 								<div class="submit">
 									<button style="background:#3356BB" class="btn btn-primary btn-block" type="submit" name="subtype" value="1"> payment</button>

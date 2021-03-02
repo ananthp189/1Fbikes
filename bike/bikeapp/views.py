@@ -24,7 +24,7 @@ import os
 from django.http import StreamingHttpResponse
 from django.conf import settings
 import urllib.parse
-import random
+
 
 
 # login webpage
@@ -209,15 +209,21 @@ def payment(request):
 
 def pay(request):
     # creat paymentid
-    bID = 317 # get from rentbike function set a global various
+    bID = BID # get from rentbike function set a global various
     #payid = random.sample(range(10002,91000),1)
-    payid = 2007 # get from rentbike function set a global various
+    payid = PID # get from rentbike function set a global various
     # set payment status
     status = 0
     # duration
-    totaltime = 612  # get from user function set a global various
-    #get start time
     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    cursor2 = db.cursor(pymysql.cursors.DictCursor)
+    sql1 = 'select renttime from customer_info where ID ="{}"'
+    sql2 = sql1.format(ID)
+    cursor2.execute(sql2)
+    totaltime = cursor2.fetchall()
+    # totaltime = 612  # get from user function set a global various
+
+    #get start time
     cursor5 = db.cursor(pymysql.cursors.DictCursor)
     sql1 = 'select starttime from pay_info where pID ="{}"'
     sql2 = sql1.format(payid)
