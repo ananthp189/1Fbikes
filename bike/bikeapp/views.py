@@ -589,6 +589,13 @@ def movebike(request):
     area_list = []
     for a in all_bikes:
         area_list.append(a['barea'])
+    a=area_list.count("A")
+    b=area_list.count("B")
+    c=area_list.count("C")
+    d=area_list.count("D")
+    e=area_list.count("E")
+    count_list=[a,b,c,d,e]
+    print(count_list)
     result = dict()
     for b in set(area_list):
         result[b] = area_list.count(b)
@@ -598,13 +605,12 @@ def movebike(request):
     warn_list = []
     for i in result.items():
         if i[1] < normal:
-            y = "area " + i[0] + " needs more bikes!!!!"
+            y = "area " + i[0] + " needs more bikes!Please adjust the distribution of bicycles "
             print(y)
             warn_list.append(y)
-        else:
-            x = "area " + i[0] + " is good"
-            print(x)
-            warn_list.append(x)
+    if len(warn_list)==0:
+        k = "Every area is good"
+        warn_list.append(k)
     #print(warn_list)
     ######################
     cursor.close()
@@ -612,7 +618,7 @@ def movebike(request):
     db.close()
     # 关闭数据库
     # print(all_bikes)
-    return render(request, 'bikeapp/movebike.html',{'allbikes': all_bikes, 'result': result.items(),'warn':warn_list})
+    return render(request, 'bikeapp/movebike.html',{'allbikes': all_bikes, 'result': result.items(),'warn':warn_list,'count':count_list})
 
 
 #---------------movebike_action--------#
