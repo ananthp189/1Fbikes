@@ -373,6 +373,64 @@ def locationmap(request):
 
 #--------------- Rent Bike Module  ----------------------#
 
+def rent(request):
+
+    #Setup database connection
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+
+    #Get user from global id
+    cursor.execute("SELECT * FROM customer_info WHERE ID = %s", ID)
+    user = cursor.fetchone()
+
+    # fetch all bikes
+    # calculate all the distances between user and bikes
+    # choose the bike with the minimum distance
+
+    cursor.execute("SELECT * FROM bike_info WHERE busage = 0 AND bstatus = 0")
+
+    bikes = cursor.fetchall()
+    mindistance = None
+    bike = None
+
+    # for every bike calculate the distance between user and bike
+    # if the minimum distance is none or less than distance
+    # set the mindistance to distance
+    # set bike to availablebike
+
+    for availableBike in bikes:
+        distancex = pow((float(user["uGPSx"])-float(availableBike["bGPSx"])),2)
+        distancey = pow((float(user["uGPSy"]) - float(availableBike["bGPSy"])), 2)
+        distance = math.sqrt(distancex + distancey)
+        if not isinstance(mindistance, float) or distance < mindistance:
+            mindistance = distance
+            bike = availableBike
+    
+
+    print(bike)
+    
+    if bike is None or bikes is None:
+        error="no bikes available"
+        return render(request, 'bikeapp/rentbike.html', {'bikeid': error})        
+    cursor.execute("UPDATE bike_info SET busage = 1 WHERE bID = %s", int(bike["bID"]))
+    db.commit()
+
+
+    # with global id get user
+    # assign bike based on user area
+    # record start time
+    global PID
+    PID = random.sample(range(10002, 91000), 1) 
+    sql2 = "INSERT INTO pay_info (pID, ID, bID, starttime, startGPSx, startGPSy) VALUES (%s, %s, %s, %s, %s, %s)"
+    cursor.execute(sql2, (PID, user["ID"], bike["bID"], time.time(), bike["bGPSx"], bike["bGPSy"]))
+    db.commit()
+    bikeid = bike["bID"]
+    bikepin = bike["bpassword"]
+    global BID
+    BID = bike["bID"]
+   
+    return render(request, 'bikeapp/rentbike.html', {'bike_id': bikeid,'bike_pin': bikepin})
+
 #--------------- Return Bike Module  ----------------------#
 
 #return a bike function
