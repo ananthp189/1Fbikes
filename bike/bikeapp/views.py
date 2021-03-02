@@ -213,7 +213,7 @@ def payment(request):
     # duration
     totaltime = 612  # get from user function set a global various
     # get start time
-    db = pymysql.connect(host='localhost', user='root', password='19990124', database='bikerental')
+    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
     cursor5 = db.cursor(pymysql.cursors.DictCursor)
     sql1 = 'select starttime from pay_info where pID ="{}"'
     sql2 = sql1.format(payid)
@@ -307,7 +307,7 @@ def pay(request):
     put = 1 # return various
     status = 1  # pay successful
     buse = 0  # in bike chart
-    totaltime = totaltime + bduration
+    totaltime = int(totaltime) + bduration
     # database
 
     #update payment status
