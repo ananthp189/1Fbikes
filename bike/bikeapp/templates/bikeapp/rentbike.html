@@ -55,9 +55,9 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="mainpage.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Home</span></a>
             </li>
 
             <!-- Divider -->
@@ -194,8 +194,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                  Recent Trip Duration</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">40mins</div>
+                                                  Current Trip Duration</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><p id="timer"></p> </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -204,6 +204,7 @@
                                 </div>
                             </div>
                         </div>
+						
 
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -212,7 +213,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Recent bill</div>
+                                                Bike ID: Password</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">40GBP</div>
                                         </div>
                                         <div class="col-auto">
@@ -228,7 +229,9 @@
 
                 </div>
                 <!-- /.container-fluid -->
-
+			<a href="/return" class="btn btn-success btn-circle btn-lg">return bike
+                                        <i class="fas fa-check"></i>
+                                    </a>
             </div>
             <!-- End of Main Content -->
 
@@ -289,6 +292,34 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+	<script> 
+	var countupDate = localStorage.getItem('startDate'); 
+	if (countupDate) { 
+    countupDate = new Date(countupDate); 
+	} else { 
+		countupDate = new Date(); 
+		localStorage.setItem('startDate', countupDate); 
+	} 
+	// Update the count up every 1 second 
+	var x = setInterval(function() { 
+	 
+		// Get todays date and time 
+		var now = new Date().getTime(); 
+	 
+		// Find the distance between now an the count down date 
+		var timediff = now - countupDate.getTime(); 
+	 
+		// Time calculations for days, hours, minutes and seconds 
+		var days = Math.floor(timediff / (1000 * 60 * 60 * 24)); 
+		var hrs = Math.floor((timediff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
+		var min = Math.floor((timediff % (1000 * 60 * 60)) / (1000 * 60)); 
+		var sec = Math.floor((timediff % (1000 * 60)) / 1000); 
+	 
+		// Output the result in an element with id="demo" 
+		document.getElementById("timer").innerHTML = days + "d " + hrs + "h " + min + "m " + sec + "s "; 
+	}, 1000); 
+	</script> 
+
 
 </body>
 
