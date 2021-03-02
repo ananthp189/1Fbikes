@@ -735,14 +735,21 @@ def repair(request):
     select_repair_bid = request.POST.getlist('select_bid')
     #repair_bid = a.get('bid')
     #rapair_status = a.get('bstatus')
-    db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
-    cursor = db.cursor()
-    sql = 'update bike_info set bstatus=0,bproblem=null where bID=%s'
-    cursor.execute(sql, (select_repair_bid))
-    db.commit()
-    cursor.close()
-    db.close()
-    return HttpResponse('repaired--succeed')
+    if len(select_repair_bid) != 0:
+        db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
+        cursor = db.cursor()
+        sql = 'update bike_info set bstatus=0,bproblem=null where bID=%s'
+        cursor.execute(sql, (select_repair_bid))
+        db.commit()
+        cursor.close()
+        db.close()
+        #return HttpResponse('repaired--succeed')
+        messages.success(request, "Succeed!!")
+        return HttpResponseRedirect('http://127.0.0.1:8000/repairbike/')
+        # return messages
+    else:
+        messages.success(request, "Incorrect input, please check!!")
+        return HttpResponseRedirect('http://127.0.0.1:8000/repairbike/')
 #-----------------location bike------------------
 # def locationbike(request):
 #     db = pymysql.connect(host='localhost', user='root', password='123123', database='bikerental')
