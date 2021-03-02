@@ -428,7 +428,7 @@ def rent(request):
     global PID
     PID = random.sample(range(10002, 91000), 1) 
     sql2 = "INSERT INTO pay_info (pID, ID, bID, starttime,endtime,duration,oribill,discount,startGPSx, startGPSy,endGPSx,endGPSy,pstatus) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s)"
-    cursor.execute(sql2, (PID, user["ID"], bike["bID"], time.time(),time.time(),0,0,0, bike["bGPSx"], bike["bGPSy"], bike["bGPSx"], bike["bGPSy",0]))
+    cursor.execute(sql2, (PID, user["ID"], bike["bID"], datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" ),datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" ),0,0,0, bike["bGPSx"], bike["bGPSy"], bike["bGPSx"], bike["bGPSy",0]))
     db.commit()
     bikeid = bike["bID"]
     bikepin = bike["bpassword"]
@@ -462,7 +462,7 @@ def returnBike(request):
     # return bike based on user current location
     # record end time and update the table
     sql1 = "update pay_info SET  endtime=%s, endGPSx=%s, endGPSy=%s where  pID= %s"
-    cursor.execute(sql1,(time.time(), user["uGPSx"], user["uGPSy"], PID))
+    cursor.execute(sql1,(datetime.datetime.now().strftime( "%Y-%m-%d %H:%M:%S" ), user["uGPSx"], user["uGPSy"], PID))
     db.commit()
     cursor.execute("SELECT * FROM pay_info WHERE pID = %s",PID)
     bduration=0
