@@ -540,13 +540,13 @@ def movebike(request):
     for b in set(area_list):
         result[b] = area_list.count(b)
     print(result.items())
-    #假设每个区域标准80辆车，显示车辆不足区域
-    normal = 80;
+    #假设每个区域标准20辆车，显示车辆不足区域
+    normal = 20;
     warn_list = []
     for i in result.items():
         if i[1] < normal:
-            y = "area " + i[0] + " needs more bikes!Please adjust the distribution of bicycles "
-            print(y)
+            y = "Area " + i[0] + " needs more bikes!Please adjust the distribution of bicycles."+ "\n"
+            # print(y)
             warn_list.append(y)
     if len(warn_list)==0:
         k = "Every area is good"
