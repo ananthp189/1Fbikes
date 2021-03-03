@@ -545,7 +545,7 @@ def movebike(request):
     warn_list = []
     for i in result.items():
         if i[1] < normal:
-            y = "Area " + i[0] + " needs more bikes!Please adjust the distribution of bicycles."+ "\n"
+            y = "Area " + i[0] + " needs more bikes! Please adjust the distribution of bicycles."
             # print(y)
             warn_list.append(y)
     if len(warn_list)==0:
