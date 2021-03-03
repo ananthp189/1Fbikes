@@ -3,7 +3,7 @@
 
 #Prerequisites :
 #python 3.7 and above , django latest , mysql server latest to be installed and set up. Database to be named bikerental and passcode could be reused as 123123 more instructions in the report.
-# Please install pyecharts , folium , numpy ,pandas package, mysqlclient, bootstrap, math, datetime .run pip install (modulename) in pycharm/spyder.
+# Please install pyecharts , folium , numpy ,pandas package, mysqlclient, bootstrap, math, datetime ,pymysql.run pip install (modulename) in pycharm/spyder.
 # run the function:
 # 1.open manage.py and run it
 # or input: "python manage.py runserver" in terminal of pycharm.
