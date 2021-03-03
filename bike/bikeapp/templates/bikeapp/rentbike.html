@@ -236,11 +236,12 @@
 						<a href="/return" class="btn btn-success btn-sm">return bike
                                 <i class="fas fa-check"></i>
                          </a>
-				</div>
-				<div>
+						 <div>
 							<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-danger fa-sm text-white-50"></i> Pay</a>
-                    </div>
+						</div>
+				</div>
+				
             <!-- End of Main Content -->
 					
             <!-- Footer -->
@@ -303,23 +304,23 @@
 	<html xmlns="http://www.w3.org/1999/xhtml" >
 
 <script type="text/javascript">
-	var minutesLabel = document.getElementById("minutes");
-	var secondsLabel = document.getElementById("seconds");
-	var totalSeconds = 0;
+	var min = document.getElementById("minutes");
+	var sec = document.getElementById("seconds");
+	var totsec = 0;
 	setInterval(setTime, 1000);
 
 	function setTime() {
-	  ++totalSeconds;
-	  secondsLabel.innerHTML = pad(totalSeconds % 60);
-	  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+	  ++totsec;
+	  sec.innerHTML = pad(totsec % 60);
+	  min.innerHTML = pad(parseInt(totsec / 60));
 	}
 
 	function pad(val) {
-	  var valString = val + "";
-	  if (valString.length < 2) {
-		return "0" + valString;
+	  var stringval = val + "";
+	  if (stringval.length < 2) {
+		return "0" + stringval;
 	  } else {
-		return valString;
+		return stringval;
 	  }
 	}
 </script>
