@@ -1,5 +1,6 @@
 # BikeRental
 
+# Please install pyecharts package and folium package
 # run the function:
 # 1.open manage.py and run it
 # or input: "python manage.py runserver" in terminal
