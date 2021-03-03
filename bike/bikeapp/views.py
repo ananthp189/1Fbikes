@@ -284,7 +284,7 @@ def pay(request):
     bduration = bduration / 60
     # count = bduration // 100 # get the hour
     original_bill = bduration * 0.01  # 0.01 pounds a minute
-    if int(totaltime) >= 500:
+    if float(totaltime) >= 500:
         discount_bill = original_bill * 0.8 # discount, 80% off
     else:
         discount_bill = original_bill # no discount
@@ -307,7 +307,7 @@ def pay(request):
     put = 1 # return various
     status = 1  # pay successful
     buse = 0  # in bike chart
-    totaltime = int(totaltime) + bduration
+    totaltime = float(totaltime) + bduration
     # database
 
     #update payment status
