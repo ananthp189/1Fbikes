@@ -1,8 +1,10 @@
 # BikeRental
 
 
-#Prerequisites :
-#python 3.7 and above , django latest , mysql server latest to be installed and set up. Database to be named bikerental and passcode could be reused as 123123 more instructions in the report.
+#  Prerequisites :
+# python 3.7 and above , django latest , mysqlserver latest to be installed and set up.
+# user root to have password 123123 in mysql for the code to run.alternatively, update the passwords of choice in views.py
+# Database to be named bikerental and creation script is attached as bikerental_db.sql . this needs to be run in the mysql server.
 # Please install pyecharts , folium , numpy ,pandas package, mysqlclient, bootstrap, math, datetime ,pymysql.run pip install (modulename) in pycharm/spyder.
 # run the function:
 # 1.open manage.py and run it
